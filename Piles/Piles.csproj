@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Models\Pile.cs" />
+    <Compile Include="Models\Pileup.cs" />
     <Compile Include="Models\Rumination.cs" />
     <Compile Include="ViewModels\PileViewModel.cs" />
     <Compile Include="ViewModels\RuminationViewModel.cs" />
