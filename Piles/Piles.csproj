@@ -55,10 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AddRuminationCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Models\Pile.cs" />
     <Compile Include="Models\Pileup.cs" />
     <Compile Include="Models\Rumination.cs" />
+    <Compile Include="ViewModels\PileupViewModel.cs" />
     <Compile Include="ViewModels\PileViewModel.cs" />
     <Compile Include="ViewModels\RuminationViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

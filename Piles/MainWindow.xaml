@@ -24,10 +24,20 @@
             <Button Margin="5,5,5,0">C</Button>
         </StackPanel>
         <TabControl Grid.Row="1" Grid.Column="1" Margin="5">
-            <TabItem>
+            <TabItem Header="{Binding Name}">
                 <StackPanel>
-                    <TextBox></TextBox>
-                    <ListView ItemsSource="{Binding Ruminations}" />
+                    <TextBox Text="{Binding RuminationText, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding AddRunminationCommand}" Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Description}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
             </TabItem>
         </TabControl>
