@@ -15,7 +15,10 @@ namespace Piles
             List<Rumination> ruminations = new List<Rumination>();
             ruminations.Add(rumination);
             Pile pile = new Pile("General", ruminations);
-            DataContext = new PileViewModel(pile);
+            List<Pile> piles = new List<Pile>();
+            piles.Add(pile);
+            Pileup pileup = new Pileup(piles);
+            DataContext = new PileupViewModel(pileup);
         }
     }
 }

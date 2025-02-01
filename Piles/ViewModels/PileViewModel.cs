@@ -32,9 +32,18 @@ namespace Piles.ViewModels
 
         public ICommand AddRunminationCommand { get; }
 
+        public ICommand RemoveRunminationCommand { get; }
+
+        public ICommand CheckAllCommand { get; }
+
+        public ICommand UncheckAllCommand { get; }
+
         public PileViewModel(Pile pile)
         {
             AddRunminationCommand = new AddRuminationCommand(this);
+            RemoveRunminationCommand = new RemoveRuminationCommand(this);
+            CheckAllCommand = new CheckAllCommand(this);
+            UncheckAllCommand = new UncheckAllCommand(this);
 
             _pile = pile;
             _ruminations = new ObservableCollection<RuminationViewModel>();
@@ -56,6 +65,17 @@ namespace Piles.ViewModels
         public void AddRumination(RuminationViewModel ruminationViewModel)
         {
             _ruminations.Add(ruminationViewModel);
+        }
+
+        public void RemoveRumination()
+        {
+            for (int i = _ruminations.Count - 1; i >= 0; i--)
+            {
+                if (_ruminations[i].IsChecked)
+                {
+                    _ruminations.Remove(_ruminations[i]);
+                }
+            }
         }
     }
 }

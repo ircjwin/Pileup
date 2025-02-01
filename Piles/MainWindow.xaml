@@ -19,27 +19,42 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
-            <Button Margin="5,5,5,0">A</Button>
-            <Button Margin="5,5,5,0">B</Button>
-            <Button Margin="5,5,5,0">C</Button>
+            <Button Command="{Binding CheckAllCommand}" Margin="5,5,5,0">A</Button>
+            <Button Command="{Binding UncheckAllCommand}" Margin="5,5,5,0">B</Button>
+            <Button Command="{Binding RemoveRunminationCommand}" Margin="5,5,5,0">C</Button>
         </StackPanel>
-        <TabControl Grid.Row="1" Grid.Column="1" Margin="5">
-            <TabItem Header="{Binding Name}">
-                <StackPanel>
-                    <TextBox Text="{Binding RuminationText, UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding AddRunminationCommand}" Key="Return" />
-                        </TextBox.InputBindings>
-                    </TextBox>
-                    <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Description}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
-            </TabItem>
+        <TabControl ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" />
+                        <Button Height="10" Width="10" Margin="2,0,0,0" Padding="0">
+                            <TextBlock FontSize="6" FontWeight="Bold" Text="X" />
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBox Text="{Binding RuminationText, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding AddRunminationCommand}" Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding Description}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
         </TabControl>
     </Grid>
 </Window>

@@ -56,7 +56,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\AddRuminationCommand.cs" />
+    <Compile Include="Commands\CheckAllCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\RemoveRuminationCommand.cs" />
+    <Compile Include="Commands\UncheckAllCommand.cs" />
     <Compile Include="Models\Pile.cs" />
     <Compile Include="Models\Pileup.cs" />
     <Compile Include="Models\Rumination.cs" />

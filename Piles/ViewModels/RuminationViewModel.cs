@@ -8,11 +8,34 @@ namespace Piles.ViewModels
 
         public string Description => _rumination.Description;
 
-        public bool IsChecked => _rumination.IsChecked;
+        //public bool IsChecked => _rumination.IsChecked;
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get
+            {
+                return _isChecked;
+            }
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged(nameof(IsChecked));
+            }
+        }
 
         public RuminationViewModel(Rumination rumination)
         {
             _rumination = rumination;
+        }
+
+        public void CheckRumination()
+        {
+            IsChecked = true;
+        }
+
+        public void UncheckRumination()
+        {
+            IsChecked = false;
         }
     }
 }
