@@ -23,7 +23,7 @@
             <Button Command="{Binding UncheckAllCommand}" Margin="5,5,5,0">B</Button>
             <Button Command="{Binding RemoveRunminationCommand}" Margin="5,5,5,0">C</Button>
         </StackPanel>
-        <TabControl ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5">
+        <TabControl SelectedIndex="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
