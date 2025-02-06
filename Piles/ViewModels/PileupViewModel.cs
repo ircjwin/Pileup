@@ -1,12 +1,27 @@
-﻿using Piles.Models;
+﻿using Piles.Commands;
+using Piles.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Piles.ViewModels
 {
     public class PileupViewModel : ViewModelBase
     {
         private bool _isInserting { get; set; } = false;
+
+        private bool _isRemoving { get; set; } = false;
+        public bool IsRemoving
+        {
+            get
+            {
+                return _isRemoving;
+            }
+            set
+            {
+                _isRemoving = value;
+            }
+        }
 
         private int _currentIndex;
         public int CurrentIndex
@@ -24,7 +39,15 @@ namespace Piles.ViewModels
                 }
                 if (value == _piles.Count - 1)
                 {
-                    AddPile();
+                    if (!_isRemoving || _piles.Count == 1)
+                    {
+                        AddPile();
+                    }
+                    else
+                    {
+                        _currentIndex = value - 1;
+                        OnPropertyChanged(nameof(CurrentIndex));
+                    }
                 }
                 _currentIndex = value;
                 OnPropertyChanged(nameof(CurrentIndex));
@@ -37,8 +60,12 @@ namespace Piles.ViewModels
 
         public IEnumerable<PileViewModel> Piles => _piles;
 
+        public ICommand RemovePileCommand { get; }
+
         public PileupViewModel(Pileup pileup)
         {
+            RemovePileCommand = new RemovePileCommand(this);
+
             _pileup = pileup;
             _piles = new ObservableCollection<PileViewModel>();
             UpdatePiles(_pileup.Piles);
@@ -66,6 +93,11 @@ namespace Piles.ViewModels
             _isInserting = true;
             _piles.Insert(_piles.Count - 1, newPileViewModel);
             CurrentIndex = _piles.Count - 2;
+        }
+
+        public void RemovePile(PileViewModel pileViewModel)
+        {
+            _piles.Remove(pileViewModel);
         }
     }
 }
