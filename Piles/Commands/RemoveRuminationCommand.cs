@@ -4,16 +4,16 @@ namespace Piles.Commands
 {
     public class RemoveRuminationCommand : CommandBase
     {
-        private readonly PileViewModel _pileViewModel;
+        private readonly PileupViewModel _pileupViewModel;
 
-        public RemoveRuminationCommand(PileViewModel pileViewModel)
+        public RemoveRuminationCommand(PileupViewModel pileupViewModel)
         {
-            _pileViewModel = pileViewModel;
+            _pileupViewModel = pileupViewModel;
         }
 
         public override void Execute(object parameter)
         {
-            _pileViewModel.RemoveRumination();
+            _pileupViewModel.RemoveChecked();
         }
     }
 }

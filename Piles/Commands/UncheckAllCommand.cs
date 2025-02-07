@@ -4,19 +4,16 @@ namespace Piles.Commands
 {
     public class UncheckAllCommand : CommandBase
     {
-        private readonly PileViewModel _pileViewModel;
+        private readonly PileupViewModel _pileupViewModel;
 
-        public UncheckAllCommand(PileViewModel pileViewModel)
+        public UncheckAllCommand(PileupViewModel pileupViewModel)
         {
-            _pileViewModel = pileViewModel;
+            _pileupViewModel = pileupViewModel;
         }
 
         public override void Execute(object parameter)
         {
-            foreach (RuminationViewModel ruminationViewModel in _pileViewModel.Ruminations)
-            {
-                ruminationViewModel.UncheckRumination();
-            }
+            _pileupViewModel.UncheckAll();
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Piles.ViewModels
 
         public string Description => _rumination.Description;
 
-        //public bool IsChecked => _rumination.IsChecked;
         private bool _isChecked;
         public bool IsChecked
         {

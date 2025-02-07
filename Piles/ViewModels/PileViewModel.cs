@@ -45,18 +45,9 @@ namespace Piles.ViewModels
 
         public ICommand AddRunminationCommand { get; }
 
-        public ICommand RemoveRunminationCommand { get; }
-
-        public ICommand CheckAllCommand { get; }
-
-        public ICommand UncheckAllCommand { get; }
-
         public PileViewModel(Pile pile)
         {
             AddRunminationCommand = new AddRuminationCommand(this);
-            RemoveRunminationCommand = new RemoveRuminationCommand(this);
-            CheckAllCommand = new CheckAllCommand(this);
-            UncheckAllCommand = new UncheckAllCommand(this);
 
             _pile = pile;
             _ruminations = new ObservableCollection<RuminationViewModel>();

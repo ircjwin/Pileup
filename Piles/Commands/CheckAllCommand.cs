@@ -4,19 +4,16 @@ namespace Piles.Commands
 {
     public class CheckAllCommand : CommandBase
     {
-        private readonly PileViewModel _pileViewModel;
+        private readonly PileupViewModel _pileupViewModel;
 
-        public CheckAllCommand(PileViewModel pileViewModel)
+        public CheckAllCommand(PileupViewModel pileupViewModel)
         {
-            _pileViewModel = pileViewModel;
+            _pileupViewModel = pileupViewModel;
         }
 
         public override void Execute(object parameter)
         {
-            foreach (RuminationViewModel ruminationViewModel in _pileViewModel.Ruminations)
-            {
-                ruminationViewModel.CheckRumination();
-            }
+            _pileupViewModel.CheckAll();
         }
     }
 }

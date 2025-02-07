@@ -45,9 +45,18 @@ namespace Piles.ViewModels
 
         public ICommand RemovePileCommand { get; }
 
+        public ICommand RemoveRuminationCommand { get; }
+
+        public ICommand CheckAllCommand { get; }
+
+        public ICommand UncheckAllCommand { get; }
+
         public PileupViewModel(Pileup pileup)
         {
             RemovePileCommand = new RemovePileCommand(this);
+            RemoveRuminationCommand = new RemoveRuminationCommand(this);
+            CheckAllCommand = new CheckAllCommand(this);
+            UncheckAllCommand = new UncheckAllCommand(this);
 
             _pileup = pileup;
             _piles = new ObservableCollection<PileViewModel>();
@@ -82,6 +91,27 @@ namespace Piles.ViewModels
         public void RemovePile(PileViewModel pileViewModel)
         {
             _piles.Remove(pileViewModel);
+        }
+
+        public void RemoveChecked()
+        {
+            _piles[CurrentIndex].RemoveRumination();
+        }
+
+        public void CheckAll()
+        {
+            foreach (RuminationViewModel ruminationViewModel in _piles[CurrentIndex].Ruminations)
+            {
+                ruminationViewModel.CheckRumination();
+            }
+        }
+
+        public void UncheckAll()
+        {
+            foreach (RuminationViewModel ruminationViewModel in _piles[CurrentIndex].Ruminations)
+            {
+                ruminationViewModel.UncheckRumination();
+            }
         }
     }
 }
