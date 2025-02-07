@@ -10,19 +10,6 @@ namespace Piles.ViewModels
     {
         private bool _isInserting { get; set; } = false;
 
-        private bool _isRemoving { get; set; } = false;
-        public bool IsRemoving
-        {
-            get
-            {
-                return _isRemoving;
-            }
-            set
-            {
-                _isRemoving = value;
-            }
-        }
-
         private int _currentIndex;
         public int CurrentIndex
         {
@@ -32,6 +19,10 @@ namespace Piles.ViewModels
             }
             set
             {
+                if (value == -1 && _piles.Count > 1)
+                {
+                    return;
+                }
                 if (_isInserting)
                 {
                     _isInserting = false;
@@ -39,15 +30,7 @@ namespace Piles.ViewModels
                 }
                 if (value == _piles.Count - 1)
                 {
-                    if (!_isRemoving || _piles.Count == 1)
-                    {
-                        AddPile();
-                    }
-                    else
-                    {
-                        _currentIndex = value - 1;
-                        OnPropertyChanged(nameof(CurrentIndex));
-                    }
+                    AddPile();
                 }
                 _currentIndex = value;
                 OnPropertyChanged(nameof(CurrentIndex));
@@ -83,6 +66,7 @@ namespace Piles.ViewModels
 
             Pile addPile = new Pile("+", new ObservableCollection<Rumination>());
             PileViewModel addPileViewModel = new PileViewModel(addPile);
+            addPileViewModel.IsRemovable = false;
             _piles.Add(addPileViewModel);
         }
 

@@ -8,6 +8,19 @@ namespace Piles.ViewModels
 {
     public class PileViewModel : ViewModelBase
     {
+        private bool _isRemovable = true;
+        public bool IsRemovable
+        {
+            get
+            {
+                return _isRemovable;
+            }
+            set
+            {
+                _isRemovable = value;
+            }
+        }
+
         private string _ruminationText;
         public string RuminationText
         {
