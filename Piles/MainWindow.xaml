@@ -19,9 +19,15 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
-            <Button Command="{Binding CheckAllCommand}" Margin="5,5,5,0">A</Button>
-            <Button Command="{Binding UncheckAllCommand}" Margin="5,5,5,0">B</Button>
-            <Button Command="{Binding RemoveRuminationCommand}" Margin="5,5,5,0">C</Button>
+            <Button Command="{Binding CheckAllCommand}" Margin="5,5,5,0">
+                <Image Source="Images\CheckIcon.png"></Image>
+            </Button>
+            <Button Command="{Binding UncheckAllCommand}" Margin="5,5,5,0">
+                <Image Source="Images\UncheckIcon.png"></Image>
+            </Button>
+            <Button Command="{Binding RemoveRuminationCommand}" Margin="5,5,5,0">
+                <Image Source="Images\TrashIcon.png"></Image>
+            </Button>
         </StackPanel>
         <TabControl Name="MainTabControl" SelectedIndex="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5">
             <TabControl.ItemTemplate>

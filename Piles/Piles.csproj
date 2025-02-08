@@ -110,5 +110,14 @@
   <ItemGroup>
     <Folder Include="Views\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CheckIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TrashIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\UncheckIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
