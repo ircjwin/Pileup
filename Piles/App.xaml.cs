@@ -9,9 +9,11 @@ namespace Piles
         private const string CONNECTION_STRING = "Data Source=piles.db";
         protected override void OnStartup(StartupEventArgs e)
         {
-            DbContextOptions options = new DbContextOptionsBuilder().UseSqlite(CONNECTION_STRING).Options;
-            PilesDbContext dbContext = new PilesDbContext(options);
-            dbContext.Database.Migrate();
+            PilesDbContextFactory pilesDbContextFactory = new PilesDbContextFactory(CONNECTION_STRING);
+            using (PilesDbContext dbContext = pilesDbContextFactory.CreateDbContext())
+            {
+                dbContext.Database.Migrate();
+            }
 
             base.OnStartup(e);
         }
