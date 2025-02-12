@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Piles.Data;
 using System.Windows;
 
 namespace Piles
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        private const string CONNECTION_STRING = "Data Source=piles.db";
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            DbContextOptions options = new DbContextOptionsBuilder().UseSqlite(CONNECTION_STRING).Options;
+            PilesDbContext dbContext = new PilesDbContext(options);
+            dbContext.Database.Migrate();
+
+            base.OnStartup(e);
+        }
     }
 }
