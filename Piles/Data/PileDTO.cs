@@ -8,6 +8,6 @@ namespace Piles.Data
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<RuminationDTO> Rumination { get; set; }
+        public List<RuminationDTO> Ruminations { get; set; }
     }
 }

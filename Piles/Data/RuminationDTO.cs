@@ -7,6 +7,6 @@ namespace Piles.Data
         [Key]
         public int Id { get; set; }
         public string Description { get; set; }
-        public PileDTO PileDTO { get; set; }
+        public PileDTO Pile { get; set; }
     }
 }
