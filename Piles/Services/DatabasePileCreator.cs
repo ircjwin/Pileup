@@ -29,7 +29,7 @@ namespace Piles.Services
         {
             return new PileDTO()
             {
-                Name = pile.Name,
+                Justification = pile.Justification,
                 Ruminations = (List<RuminationDTO>)pile.Ruminations,
             };
         }

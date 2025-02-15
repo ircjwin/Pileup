@@ -81,7 +81,7 @@ namespace Piles.ViewModels
 
         private void AddPile()
         {
-            Pile newPile = new Pile("New List", new ObservableCollection<Rumination>());
+            Pile newPile = new Pile("New Pile", new ObservableCollection<Rumination>());
             PileViewModel newPileViewModel = new PileViewModel(newPile);
             _isInserting = true;
             _piles.Insert(_piles.Count - 1, newPileViewModel);

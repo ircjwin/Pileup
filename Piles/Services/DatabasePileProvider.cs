@@ -28,7 +28,7 @@ namespace Piles.Services
 
         private static Pile ToPile(PileDTO dto)
         {
-            return new Pile(dto.Name, dto.Ruminations as IEnumerable<Rumination>);
+            return new Pile(dto.Justification, dto.Ruminations as IEnumerable<Rumination>);
         }
     }
 }

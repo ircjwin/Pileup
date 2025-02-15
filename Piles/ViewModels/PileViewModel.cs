@@ -37,7 +37,7 @@ namespace Piles.ViewModels
 
         private readonly Pile _pile;
 
-        public string Name => _pile.Name;
+        public string Justification => _pile.Justification;
 
         private readonly ObservableCollection<RuminationViewModel> _ruminations;
 

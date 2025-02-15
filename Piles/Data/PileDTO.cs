@@ -7,7 +7,7 @@ namespace Piles.Data
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Justification { get; set; }
         public List<RuminationDTO> Ruminations { get; set; }
     }
 }
