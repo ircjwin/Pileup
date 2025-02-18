@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Piles.Data;
+using Piles.Host;
 using Piles.Services;
 using System.Windows;
 
@@ -7,6 +9,8 @@ namespace Piles
 {
     public partial class App : Application
     {
+        private readonly IHost _host;
+
         private const string CONNECTION_STRING = "Data Source=piles.db";
 
         private readonly PilesDbContextFactory _pilesDbContextFactory;
