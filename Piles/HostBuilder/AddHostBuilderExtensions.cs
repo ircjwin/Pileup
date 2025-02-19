@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace Piles.Host
+namespace Piles.HostBuilder
 {
     public static class AddHostBuilderExtensions
     {

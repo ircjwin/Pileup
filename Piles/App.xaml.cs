@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Piles.Data;
-using Piles.Host;
+using Piles.HostBuilder;
 using Piles.Services;
 using System.Windows;
 
@@ -13,27 +14,40 @@ namespace Piles
 
         private const string CONNECTION_STRING = "Data Source=piles.db";
 
-        private readonly PilesDbContextFactory _pilesDbContextFactory;
-
         public App()
         {
-            _pilesDbContextFactory = new PilesDbContextFactory(CONNECTION_STRING);
+            _host = Host.CreateDefaultBuilder()
+                .AddServices()
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddSingleton<IPilesDbContextFactory>(new PilesDbContextFactory(CONNECTION_STRING));
 
-            // TODO: Stitch services to models
-            IPileCreator pileCreator = new DatabasePileCreator(_pilesDbContextFactory);
-            IPileProvider pileProvider = new DatabasePileProvider(_pilesDbContextFactory);
-            IRuminationCreator ruminationCreator = new DatabaseRuminationCreator(_pilesDbContextFactory);
-            IRuminationProvider ruminationProvider = new DatabaseRuminationProvider(_pilesDbContextFactory);
+                    services.AddSingleton<IPileCreator, DatabasePileCreator>();
+                    services.AddSingleton<IPileProvider, DatabasePileProvider>();
+                    services.AddSingleton<IRuminationCreator, DatabaseRuminationCreator>();
+                    services.AddSingleton<IRuminationProvider, DatabaseRuminationProvider>();
+                })
+                .Build();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            using (PilesDbContext dbContext = _pilesDbContextFactory.CreateDbContext())
+            _host.Start();
+
+            IPilesDbContextFactory pilesDbContextFactory = _host.Services.GetRequiredService<IPilesDbContextFactory>();
+            using (PilesDbContext dbContext = pilesDbContextFactory.CreateDbContext())
             {
                 dbContext.Database.Migrate();
             }
 
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _host.Dispose();
+
+            base.OnExit(e);
         }
     }
 }

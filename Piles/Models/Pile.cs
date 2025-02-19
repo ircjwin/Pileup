@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Piles.Services;
+using System.Collections.Generic;
 
 namespace Piles.Models
 {
@@ -10,6 +11,24 @@ namespace Piles.Models
         public bool IsVisible { get; set; }
 
         public IEnumerable<Rumination> Ruminations { get; set; }
+
+        private IRuminationProvider _ruminationProvider;
+        public IRuminationProvider RuminationProvider
+        {
+            set
+            {
+                _ruminationProvider = value;
+            }
+        }
+
+        private IRuminationCreator _ruminationCreator;
+        public IRuminationCreator RuminationCreator
+        {
+            set
+            {
+                _ruminationCreator = value;
+            }
+        }
 
         public Pile(string justification, IEnumerable<Rumination> ruminations)
         {
