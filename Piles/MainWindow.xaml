@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="3" Height="18" VerticalAlignment="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Save" />
+                <MenuItem Header="Save" Command="{Binding CreatePileCommand}" />
                 <MenuItem Header="Settings" />
                 <MenuItem Header="Close" />
             </MenuItem>

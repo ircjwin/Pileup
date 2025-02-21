@@ -7,27 +7,22 @@ namespace Piles.Models
     {
         public IEnumerable<Pile> Piles { get; set; }
 
-        private IPileProvider _pileProvider;
-        public IPileProvider PileProvider
-        {
-            set
-            {
-                _pileProvider = value;
-            }
-        }
+        private readonly IPileProvider _pileProvider;
 
-        private IPileCreator _pileCreator;
-        public IPileCreator PileCreator
-        {
-            set
-            {
-                _pileCreator = value;
-            }
-        }
+        private readonly IPileCreator _pileCreator;
 
-        public Pileup(IEnumerable<Pile> piles)
+        public Pileup(IEnumerable<Pile> piles, IPileProvider pileProvider, IPileCreator pileCreator)
         {
             Piles = piles;
+            _pileProvider = pileProvider;
+            _pileCreator = pileCreator;
+        }
+
+        public void AddPile()
+        {
+            List<Rumination> ruminations = new List<Rumination>();
+            Pile pile = new Pile("New Pile", ruminations);
+            _pileCreator.CreatePile(pile);
         }
     }
 }

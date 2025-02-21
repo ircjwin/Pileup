@@ -43,6 +43,8 @@ namespace Piles.ViewModels
 
         public IEnumerable<PileViewModel> Piles => _piles;
 
+        public ICommand CreatePileCommand { get; set; }
+
         public ICommand RemovePileCommand { get; }
 
         public ICommand RemoveRuminationCommand { get; }
@@ -53,6 +55,7 @@ namespace Piles.ViewModels
 
         public PileupViewModel(Pileup pileup)
         {
+            CreatePileCommand = new CreatePileCommand(pileup);
             RemovePileCommand = new RemovePileCommand(this);
             RemoveRuminationCommand = new RemoveRuminationCommand(this);
             CheckAllCommand = new CheckAllCommand(this);

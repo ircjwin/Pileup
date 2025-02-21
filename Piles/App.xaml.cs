@@ -5,6 +5,8 @@ using Piles.Data;
 using Piles.HostBuilder;
 using Piles.Services;
 using System.Windows;
+using Piles.Models;
+using Piles.ViewModels;
 
 namespace Piles
 {
@@ -26,6 +28,13 @@ namespace Piles
                     services.AddSingleton<IPileProvider, DatabasePileProvider>();
                     services.AddSingleton<IRuminationCreator, DatabaseRuminationCreator>();
                     services.AddSingleton<IRuminationProvider, DatabaseRuminationProvider>();
+
+                    services.AddTransient<Pileup>();
+
+                    services.AddSingleton(s => new MainWindow()
+                    {
+                        DataContext = s.GetRequiredService<PileupViewModel>()
+                    });
                 })
                 .Build();
         }
@@ -39,6 +48,9 @@ namespace Piles
             {
                 dbContext.Database.Migrate();
             }
+
+            MainWindow = _host.Services.GetRequiredService<MainWindow>();
+            MainWindow.Show();
 
             base.OnStartup(e);
         }
