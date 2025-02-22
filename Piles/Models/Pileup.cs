@@ -1,5 +1,6 @@
 ﻿using Piles.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Piles.Models
 {
@@ -16,6 +17,11 @@ namespace Piles.Models
             Piles = piles;
             _pileProvider = pileProvider;
             _pileCreator = pileCreator;
+        }
+
+        public async Task<IEnumerable<Pile>> GetAllPiles()
+        {
+            return await _pileProvider.GetAllPiles();
         }
 
         public void AddPile()
