@@ -1,5 +1,7 @@
-﻿using Piles.Services;
+﻿using Microsoft.Extensions.FileProviders;
+using Piles.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Piles.Models
 {
@@ -12,28 +14,27 @@ namespace Piles.Models
 
         public IEnumerable<Rumination> Ruminations { get; set; }
 
-        private IRuminationProvider _ruminationProvider;
-        public IRuminationProvider RuminationProvider
-        {
-            set
-            {
-                _ruminationProvider = value;
-            }
-        }
+        private readonly IRuminationProvider _ruminationProvider;
 
-        private IRuminationCreator _ruminationCreator;
-        public IRuminationCreator RuminationCreator
-        {
-            set
-            {
-                _ruminationCreator = value;
-            }
-        }
+        private readonly IRuminationCreator _ruminationCreator;
 
-        public Pile(string justification, IEnumerable<Rumination> ruminations)
+        public Pile(string justification, IEnumerable<Rumination> ruminations, IRuminationProvider ruminationProvider = null, IRuminationCreator ruminationCreator = null)
         {
             Justification = justification;
             Ruminations = ruminations;
+            _ruminationProvider = ruminationProvider;
+            _ruminationCreator = ruminationCreator;
+        }
+
+        public async Task<IEnumerable<Rumination>> GetAllRuminations()
+        {
+            return await _ruminationProvider.GetAllRuminations();
+        }
+
+        public void AddPile()
+        {
+            Rumination rumination = new Rumination("New Task");
+            _ruminationCreator.CreateRumination(rumination, this);
         }
     }
 }

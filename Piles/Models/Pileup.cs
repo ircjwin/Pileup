@@ -24,11 +24,11 @@ namespace Piles.Models
             return await _pileProvider.GetAllPiles();
         }
 
-        public void AddPile()
+        public async Task AddPile()
         {
             List<Rumination> ruminations = new List<Rumination>();
             Pile pile = new Pile("New Pile", ruminations);
-            _pileCreator.CreatePile(pile);
+            await _pileCreator.CreatePile(pile);
         }
     }
 }

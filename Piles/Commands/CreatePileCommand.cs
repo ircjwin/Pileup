@@ -1,8 +1,9 @@
 ﻿using Piles.Models;
+using System.Threading.Tasks;
 
 namespace Piles.Commands
 {
-    internal class CreatePileCommand : CommandBase
+    internal class CreatePileCommand : AsyncCommandBase
     {
         private readonly Pileup _pileup;
 
@@ -10,9 +11,10 @@ namespace Piles.Commands
         {
             _pileup = pileup;
         }
-        public override void Execute(object parameter)
+
+        public override async Task ExecuteAsync(object parameter)
         {
-            _pileup.AddPile();
+            await _pileup.AddPile();
         }
     }
 }

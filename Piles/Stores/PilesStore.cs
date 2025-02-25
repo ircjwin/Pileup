@@ -1,8 +1,6 @@
 ﻿using Piles.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Piles.Stores
@@ -39,8 +37,8 @@ namespace Piles.Stores
 
         public async Task MakePile(Pile pile)
         {
-            await _pileup.AddPile(pile);
-            _piles.Add(pile);
+            await _pileup.AddPile();
+            await this.Load();
         }
 
         private async Task Initialize()
