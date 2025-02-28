@@ -3,11 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Piles.Data
 {
-    public class PileDTO
+    public class PileEntity
     {
         [Key]
         public int Id { get; set; }
         public string Justification { get; set; }
-        public List<RuminationDTO> Ruminations { get; set; }
+
+        public virtual ICollection<RuminationEntity> Ruminations { get; }
     }
 }

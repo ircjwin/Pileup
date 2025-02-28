@@ -20,15 +20,15 @@ namespace Piles.Services
         {
             using (PilesDbContext context = _dbContextFactory.CreateDbContext())
             {
-                IEnumerable<PileDTO> pileDTOs = await context.Piles.ToListAsync();
+                IEnumerable<PileEntity> pileEntities = await context.Piles.ToListAsync();
 
-                return pileDTOs.Select(r => ToPile(r));
+                return pileEntities.Select(r => ToPile(r));
             }
         }
 
-        private static Pile ToPile(PileDTO dto)
+        private static Pile ToPile(PileEntity entity)
         {
-            return new Pile(dto.Justification, dto.Ruminations as IEnumerable<Rumination>);
+            return new Pile(entity.Justification, entity.Ruminations as IEnumerable<Rumination>);
         }
     }
 }

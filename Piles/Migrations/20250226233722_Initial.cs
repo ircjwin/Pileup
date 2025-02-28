@@ -30,7 +30,7 @@ namespace Piles.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    PileId = table.Column<int>(type: "INTEGER", nullable: true)
+                    PileId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,7 +39,8 @@ namespace Piles.Migrations
                         name: "FK_Ruminations_Piles_PileId",
                         column: x => x.PileId,
                         principalTable: "Piles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

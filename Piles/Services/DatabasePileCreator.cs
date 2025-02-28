@@ -18,19 +18,20 @@ namespace Piles.Services
         {
             using (PilesDbContext context = _dbContextFactory.CreateDbContext())
             {
-                PileDTO pileDTO = ToPileDTO(pile);
+                PileEntity pileEntity = ToPileEntity(pile);
 
-                context.Piles.Add(pileDTO);
+                context.Piles.Add(pileEntity);
                 await context.SaveChangesAsync();
             }
         }
 
-        public PileDTO ToPileDTO(Pile pile)
+        public PileEntity ToPileEntity(Pile pile)
         {
-            return new PileDTO()
+            return new PileEntity()
             {
+                // Creation or modification of a pile should not require list of ruminations
                 Justification = pile.Justification,
-                Ruminations = (List<RuminationDTO>)pile.Ruminations,
+                //Ruminations = (List<RuminationEntity>)pile.Ruminations,
             };
         }
     }

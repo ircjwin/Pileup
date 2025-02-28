@@ -16,7 +16,7 @@ namespace Piles.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
-            modelBuilder.Entity("Piles.Data.PileDTO", b =>
+            modelBuilder.Entity("Piles.Data.PileEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,7 +30,7 @@ namespace Piles.Migrations
                     b.ToTable("Piles");
                 });
 
-            modelBuilder.Entity("Piles.Data.RuminationDTO", b =>
+            modelBuilder.Entity("Piles.Data.RuminationEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace Piles.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PileId")
+                    b.Property<int>("PileId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -49,16 +49,18 @@ namespace Piles.Migrations
                     b.ToTable("Ruminations");
                 });
 
-            modelBuilder.Entity("Piles.Data.RuminationDTO", b =>
+            modelBuilder.Entity("Piles.Data.RuminationEntity", b =>
                 {
-                    b.HasOne("Piles.Data.PileDTO", "Pile")
+                    b.HasOne("Piles.Data.PileEntity", "Pile")
                         .WithMany("Ruminations")
-                        .HasForeignKey("PileId");
+                        .HasForeignKey("PileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Pile");
                 });
 
-            modelBuilder.Entity("Piles.Data.PileDTO", b =>
+            modelBuilder.Entity("Piles.Data.PileEntity", b =>
                 {
                     b.Navigation("Ruminations");
                 });

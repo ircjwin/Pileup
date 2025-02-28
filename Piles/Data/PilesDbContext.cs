@@ -6,8 +6,8 @@ namespace Piles.Data
     {
         public PilesDbContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<PileDTO> Piles { get; set; }
+        public DbSet<PileEntity> Piles { get; set; }
 
-        public DbSet<RuminationDTO> Ruminations { get; set; }
+        public DbSet<RuminationEntity> Ruminations { get; set; }
     }
 }

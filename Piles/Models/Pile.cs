@@ -31,7 +31,7 @@ namespace Piles.Models
             return await _ruminationProvider.GetAllRuminations();
         }
 
-        public void AddPile()
+        public void AddRumination()
         {
             Rumination rumination = new Rumination("New Task");
             _ruminationCreator.CreateRumination(rumination, this);

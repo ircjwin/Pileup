@@ -20,15 +20,15 @@ namespace Piles.Services
         {
             using (PilesDbContext context = _dbContextFactory.CreateDbContext())
             {
-                IEnumerable<RuminationDTO> ruminationDTOs = await context.Ruminations.ToListAsync();
+                IEnumerable<RuminationEntity> ruminationEntities = await context.Ruminations.ToListAsync();
 
-                return ruminationDTOs.Select(r => ToRumination(r));
+                return ruminationEntities.Select(r => ToRumination(r));
             }
         }
 
-        private static Rumination ToRumination(RuminationDTO dto)
+        private static Rumination ToRumination(RuminationEntity entity)
         {
-            return new Rumination(dto.Description);
+            return new Rumination(entity.Description);
         }
     }
 }

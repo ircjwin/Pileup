@@ -7,6 +7,7 @@ using Piles.Services;
 using System.Windows;
 using Piles.Models;
 using Piles.ViewModels;
+using Piles.Stores;
 
 namespace Piles
 {
@@ -30,6 +31,8 @@ namespace Piles
                     services.AddSingleton<IRuminationProvider, DatabaseRuminationProvider>();
 
                     services.AddTransient<Pileup>();
+
+                    services.AddSingleton<PilesStore>();
 
                     services.AddSingleton(s => new MainWindow()
                     {

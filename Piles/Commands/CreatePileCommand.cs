@@ -1,20 +1,25 @@
-﻿using Piles.Models;
+﻿using Piles.Stores;
+using Piles.ViewModels;
 using System.Threading.Tasks;
 
 namespace Piles.Commands
 {
     internal class CreatePileCommand : AsyncCommandBase
     {
-        private readonly Pileup _pileup;
+        private readonly PileupViewModel _pileupViewModel;
 
-        public CreatePileCommand(Pileup pileup)
+        private readonly PilesStore _pilesStore;
+
+        public CreatePileCommand(PileupViewModel pileupViewModel, PilesStore pilesStore)
         {
-            _pileup = pileup;
+            _pileupViewModel = pileupViewModel;
+            _pilesStore = pilesStore;
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
-            await _pileup.AddPile();
+            await _pilesStore.MakePile();
+            _pileupViewModel.UpdatePiles(_pilesStore.Piles);
         }
     }
 }

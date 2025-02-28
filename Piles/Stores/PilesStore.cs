@@ -35,7 +35,7 @@ namespace Piles.Stores
             }
         }
 
-        public async Task MakePile(Pile pile)
+        public async Task MakePile()
         {
             await _pileup.AddPile();
             await this.Load();
@@ -47,6 +47,13 @@ namespace Piles.Stores
 
             _piles.Clear();
             _piles.AddRange(piles);
+
+            if (_piles.Count == 0)
+            {
+                IEnumerable<Rumination> ruminations = new List<Rumination>();
+                Pile pile = new Pile("General", ruminations);
+                _piles.Add(pile);
+            }
         }
     }
 }
