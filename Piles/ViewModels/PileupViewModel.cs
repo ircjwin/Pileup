@@ -1,6 +1,5 @@
 ﻿using Piles.Commands;
 using Piles.Models;
-using Piles.Stores;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -9,8 +8,6 @@ namespace Piles.ViewModels
 {
     public class PileupViewModel : ViewModelBase
     {
-        private readonly PilesStore _pilesStore;
-
         private bool _isInserting { get; set; } = false;
 
         private int _currentIndex;
@@ -56,17 +53,16 @@ namespace Piles.ViewModels
 
         public ICommand UncheckAllCommand { get; }
 
-        public PileupViewModel(Pileup pileup, PilesStore pilesStore)
+        public PileupViewModel(Pileup pileup)
         {
-            _pilesStore = pilesStore;
+            _pileup = pileup;
 
-            CreatePileCommand = new CreatePileCommand(this, pilesStore);
+            CreatePileCommand = new CreatePileCommand(pileup);
             RemovePileCommand = new RemovePileCommand(this);
             RemoveRuminationCommand = new RemoveRuminationCommand(this);
             CheckAllCommand = new CheckAllCommand(this);
             UncheckAllCommand = new UncheckAllCommand(this);
 
-            _pileup = pileup;
             _piles = new ObservableCollection<PileViewModel>();
             UpdatePiles(_pileup.Piles);
         }

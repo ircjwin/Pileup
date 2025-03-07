@@ -1,32 +1,59 @@
-﻿using Piles.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Piles.Data;
+using Piles.Mappers;
+using Piles.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Piles.Services
 {
     public class RuminationService : IRuminationService
     {
-        public Task CreateRumination(Rumination rumination)
+        private readonly IPilesDbContextFactory _dbContextFactory;
+
+        public RuminationService(IPilesDbContextFactory dbContextFactory)
         {
-            throw new NotImplementedException();
+            _dbContextFactory = dbContextFactory;
         }
 
-        public Task DeleteRumination(Rumination rumination)
+        public async Task CreateRumination(Rumination rumination)
         {
-            throw new NotImplementedException();
+            RuminationEntity ruminationEntity = RuminationMapper.ToRuminationEntity(rumination);
+
+            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.Ruminations.Add(ruminationEntity);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<Rumination>> GetAllRuminations()
+        public async Task DeleteRumination(Rumination rumination)
         {
-            throw new NotImplementedException();
+            RuminationEntity ruminationEntity = RuminationMapper.ToRuminationEntity(rumination);
+
+            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.Ruminations.Remove(ruminationEntity);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public Task<Rumination> GetRuminationById(int id)
+        public async Task<ICollection<Rumination>> GetAllRuminations()
         {
-            throw new NotImplementedException();
+            ICollection<Rumination> ruminations = new List<Rumination>();
+
+            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
+            {
+                ICollection<RuminationEntity> ruminationEntities = await context.Ruminations.ToListAsync();
+
+                foreach (RuminationEntity ruminationEntity in ruminationEntities)
+                {
+                    ruminations.Add(RuminationMapper.ToRumination(ruminationEntity));
+                }
+            }
+
+            return ruminations;
         }
 
         public Task UpdateRumination(Rumination rumination)

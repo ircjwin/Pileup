@@ -1,40 +1,35 @@
-﻿using Microsoft.Extensions.FileProviders;
-using Piles.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Piles.Models
 {
     public class Pile
     {
-        public string Justification { get; set; }
+        public string CreatedOn {  get; init; }
 
-        // TODO: Boolean that determines if Pile tab is visible on View
-        public bool IsVisible { get; set; }
+        public string Title { get; set; }
 
-        public IEnumerable<Rumination> Ruminations { get; set; }
+        public ICollection<Rumination> Ruminations { get; set; }
 
-        private readonly IRuminationProvider _ruminationProvider;
-
-        private readonly IRuminationCreator _ruminationCreator;
-
-        public Pile(string justification, IEnumerable<Rumination> ruminations, IRuminationProvider ruminationProvider = null, IRuminationCreator ruminationCreator = null)
+        public Pile(string title, ICollection<Rumination> ruminations)
         {
-            Justification = justification;
+            Title = title;
             Ruminations = ruminations;
-            _ruminationProvider = ruminationProvider;
-            _ruminationCreator = ruminationCreator;
         }
 
-        public async Task<IEnumerable<Rumination>> GetAllRuminations()
+        public void AddRumination(string description)
         {
-            return await _ruminationProvider.GetAllRuminations();
+            Rumination rumination = new Rumination(description);
+            Ruminations.Add(rumination);
         }
 
-        public void AddRumination()
+        public void RemoveRumination(Rumination rumination)
         {
-            Rumination rumination = new Rumination("New Task");
-            _ruminationCreator.CreateRumination(rumination, this);
+            Ruminations.Remove(rumination);
+        }
+
+        public void UpdateRumination(Rumination rumination, string description)
+        {
+            rumination.Description = description;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Piles.Data
     {
         [Key]
         public int Id { get; set; }
-        public string Justification { get; set; }
+        public string Title { get; set; }
 
         public virtual ICollection<RuminationEntity> Ruminations { get; }
     }

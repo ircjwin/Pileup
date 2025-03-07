@@ -7,7 +7,6 @@ using Piles.Services;
 using System.Windows;
 using Piles.Models;
 using Piles.ViewModels;
-using Piles.Stores;
 
 namespace Piles
 {
@@ -24,15 +23,9 @@ namespace Piles
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IPilesDbContextFactory>(new PilesDbContextFactory(CONNECTION_STRING));
-
-                    services.AddSingleton<IPileCreator, DatabasePileCreator>();
-                    services.AddSingleton<IPileProvider, DatabasePileProvider>();
-                    services.AddSingleton<IRuminationCreator, DatabaseRuminationCreator>();
-                    services.AddSingleton<IRuminationProvider, DatabaseRuminationProvider>();
-
-                    services.AddTransient<Pileup>();
-
-                    services.AddSingleton<PilesStore>();
+                    
+                    //services.AddSingleton<IPileService, PileService>();
+                    //services.AddSingleton<IRuminationService, RuminationService>();
 
                     services.AddSingleton(s => new MainWindow()
                     {

@@ -6,16 +6,17 @@ namespace Piles.Models
     {
         public string Description { get; set; }
 
-        public bool IsChecked { get; set; } = false;
-
         // TODO: Track how long rumination has been oustanding
-        private DateTime _createdOn;
-        // TODO: Track number of times rumination has been rewritten
-        private int _duplicates;
+        public DateTime CreatedOn {  get; init; }
 
-        public Rumination(string description)
+        // TODO: Track number of times rumination has been rewritten
+        public uint Duplicates { get; set; }
+
+        public Rumination(string description, uint duplicates = default, DateTime createdOn = default)
         {
             Description = description;
+            Duplicates = duplicates;
+            CreatedOn = createdOn;
         }
     }
 }

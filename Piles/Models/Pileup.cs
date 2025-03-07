@@ -1,34 +1,31 @@
-﻿using Piles.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Piles.Models
 {
     public class Pileup
     {
-        public IEnumerable<Pile> Piles { get; set; }
+        public ICollection<Pile> Piles { get; set; }
 
-        private readonly IPileProvider _pileProvider;
-
-        private readonly IPileCreator _pileCreator;
-
-        public Pileup(IEnumerable<Pile> piles, IPileProvider pileProvider, IPileCreator pileCreator)
+        public Pileup(ICollection<Pile> piles)
         {
             Piles = piles;
-            _pileProvider = pileProvider;
-            _pileCreator = pileCreator;
         }
 
-        public async Task<IEnumerable<Pile>> GetAllPiles()
-        {
-            return await _pileProvider.GetAllPiles();
-        }
-
-        public async Task AddPile()
+        public void AddPile()
         {
             List<Rumination> ruminations = new List<Rumination>();
             Pile pile = new Pile("New Pile", ruminations);
-            await _pileCreator.CreatePile(pile);
+            Piles.Add(pile);
+        }
+
+        public void RemovePile(Pile pile)
+        {
+            Piles.Remove(pile);
+        }
+
+        public void UpdatePile(Pile pile, string title)
+        {
+            pile.Title = title;
         }
     }
 }

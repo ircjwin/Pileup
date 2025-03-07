@@ -7,8 +7,7 @@ namespace Piles.Services
     public interface IRuminationService
     {
         Task CreateRumination(Rumination rumination);
-        Task<Rumination> GetRuminationById(int id);
-        Task<IEnumerable<Rumination>> GetAllRuminations();
+        Task<ICollection<Rumination>> GetAllRuminations();
         Task UpdateRumination(Rumination rumination);
         Task DeleteRumination(Rumination rumination);
     }

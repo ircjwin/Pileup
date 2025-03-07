@@ -1,10 +1,9 @@
-﻿using Piles.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Piles.Data;
+using Piles.Mappers;
 using Piles.Models;
-using Piles.Mapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Piles.Services
@@ -30,19 +29,32 @@ namespace Piles.Services
             }
         }
 
-        public Task DeletePile(Pile pile)
+        public async Task DeletePile(Pile pile)
         {
-            throw new NotImplementedException();
+            PileEntity pileEntity = PileMapper.ToPileEntity(pile);
+
+            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.Piles.Remove(pileEntity);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<Pile>> GetAllPiles()
+        public async Task<ICollection<Pile>> GetAllPiles()
         {
-            throw new NotImplementedException();
-        }
+            ICollection<Pile> piles = new List<Pile>();
 
-        public Task<Pile> GetPileById(int id)
-        {
-            throw new NotImplementedException();
+            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
+            {
+                ICollection<PileEntity> pileEntities = await context.Piles.ToListAsync();
+
+                foreach (PileEntity pileEntity in pileEntities)
+                {
+                    piles.Add(PileMapper.ToPile(pileEntity));
+                }
+            }
+
+            return piles;
         }
 
         public Task UpdatePile(Pile pile)

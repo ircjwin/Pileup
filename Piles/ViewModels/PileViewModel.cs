@@ -1,5 +1,6 @@
 ﻿using Piles.Commands;
 using Piles.Models;
+using Piles.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -37,7 +38,7 @@ namespace Piles.ViewModels
 
         private readonly Pile _pile;
 
-        public string Justification => _pile.Justification;
+        public string Title => _pile.Title;
 
         private readonly ObservableCollection<RuminationViewModel> _ruminations;
 
@@ -45,7 +46,7 @@ namespace Piles.ViewModels
 
         public ICommand AddRunminationCommand { get; }
 
-        public PileViewModel(Pile pile)
+        public PileViewModel(Pile pile, IRuminationService ruminationService)
         {
             AddRunminationCommand = new AddRuminationCommand(this);
 
