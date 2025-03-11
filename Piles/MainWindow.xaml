@@ -46,7 +46,7 @@
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Justification}" />
+                        <TextBlock Text="{Binding Title}" />
                         <Button Command="{Binding ElementName=MainTabControl, Path=DataContext.RemovePileCommand}"
                                 CommandParameter="{Binding}"
                                 Visibility="{Binding IsRemovable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
