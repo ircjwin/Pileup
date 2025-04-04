@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Piles.Data
+namespace Piles.DbContexts
 {
     public class PilesDbContextFactory : IPilesDbContextFactory
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Piles.Data
+namespace Piles.DbContexts
 {
-    public class PilesDesignTimeDbContextFactory : IDesignTimeDbContextFactory<PilesDbContext>
+    internal class PilesDesignTimeDbContextFactory : IDesignTimeDbContextFactory<PilesDbContext>
     {
         public PilesDbContext CreateDbContext(string[] args)
         {

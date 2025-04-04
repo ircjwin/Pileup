@@ -1,4 +1,4 @@
-﻿namespace Piles.Data
+﻿namespace Piles.DbContexts
 {
     public interface IPilesDbContextFactory
     {
