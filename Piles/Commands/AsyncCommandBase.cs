@@ -40,4 +40,3 @@ namespace Piles.Commands
         public abstract Task ExecuteAsync(object parameter);
     }
 }
-
