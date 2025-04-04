@@ -1,61 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Piles.Data;
-using Piles.HostBuilder;
+using Piles.DbContexts;
 using Piles.Services;
-using System.Windows;
-using Piles.Models;
 using Piles.ViewModels;
+using System.Windows;
 
 namespace Piles
 {
     public partial class App : Application
     {
-        private readonly IHost _host;
-
         private const string CONNECTION_STRING = "Data Source=piles.db";
+        private readonly IPilesDbContextFactory _pilesDbContextFactory;
+        private readonly MainWindow _mainWindow;
 
         public App()
         {
-            _host = Host.CreateDefaultBuilder()
-                .AddServices()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddSingleton<IPilesDbContextFactory>(new PilesDbContextFactory(CONNECTION_STRING));
-                    
-                    //services.AddSingleton<IPileService, PileService>();
-                    //services.AddSingleton<IRuminationService, RuminationService>();
-
-                    services.AddSingleton(s => new MainWindow()
-                    {
-                        DataContext = s.GetRequiredService<PileupViewModel>()
-                    });
-                })
-                .Build();
+            _pilesDbContextFactory = new PilesDbContextFactory(CONNECTION_STRING);
+            IPileService pileService = new PileService(_pilesDbContextFactory);
+            _mainWindow = new MainWindow()
+            {
+                DataContext = PileupViewModel.CreateViewModel(pileService)
+            };
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _host.Start();
-
-            IPilesDbContextFactory pilesDbContextFactory = _host.Services.GetRequiredService<IPilesDbContextFactory>();
-            using (PilesDbContext dbContext = pilesDbContextFactory.CreateDbContext())
+            using (PilesDbContext dbContext = _pilesDbContextFactory.CreateDbContext())
             {
                 dbContext.Database.Migrate();
             }
 
-            MainWindow = _host.Services.GetRequiredService<MainWindow>();
-            MainWindow.Show();
+            _mainWindow.Show();
 
             base.OnStartup(e);
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            _host.Dispose();
-
-            base.OnExit(e);
         }
     }
 }

@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Piles"
-        xmlns:viewmodels="clr-namespace:Piles.ViewModels"
-        d:DataContext="{d:DesignInstance Type=viewmodels:PileupViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="400">
     <Window.Resources>
@@ -23,34 +21,40 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="3" Height="18" VerticalAlignment="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Save" Command="{Binding CreatePileCommand}" />
+                <MenuItem Header="Save" Command="{Binding SavePileupCommand}"/>
                 <MenuItem Header="Settings" />
                 <MenuItem Header="Close" />
             </MenuItem>
         </Menu>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
-            <Button Command="{Binding CheckAllCommand}" Margin="5,5,5,0">
+            <Button DataContext="{Binding ElementName=MainTabControl, Path=SelectedItem}"
+                    Command="{Binding CheckAllRuminationsCommand}"
+                    Margin="5,5,5,0">
                 <Image Source="Images\CheckIcon.png" />
             </Button>
-            <Button Command="{Binding UncheckAllCommand}" Margin="5,5,5,0">
+            <Button DataContext="{Binding ElementName=MainTabControl, Path=SelectedItem}"
+                    Command="{Binding UncheckAllRuminationsCommand}"
+                    Margin="5,5,5,0">
                 <Image Source="Images\UncheckIcon.png" />
             </Button>
-            <Button Command="{Binding RemoveRuminationCommand}" Margin="5,5,5,0">
+            <Button DataContext="{Binding ElementName=MainTabControl, Path=SelectedItem}"
+                    Command="{Binding RemoveCheckedRuminationsCommand}"
+                    Margin="5,5,5,0">
                 <Image Source="Images\TrashIcon.png" />
             </Button>
         </StackPanel>
-        <TabControl Name="MainTabControl"
+        <TabControl x:Name="MainTabControl"
                     SelectedIndex="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}"
                     ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}"
                     Grid.Row="1" Grid.Column="1" Margin="5">
-            <TabControl.ItemTemplate>
+            <TabControl.ItemTemplate >
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Title}" />
                         <Button Command="{Binding ElementName=MainTabControl, Path=DataContext.RemovePileCommand}"
-                                CommandParameter="{Binding}"
-                                Visibility="{Binding IsRemovable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
-                                Height="10" Width="10" Margin="2,0,0,0" Padding="0">
+                            CommandParameter="{Binding}"
+                            Visibility="{Binding IsRemovable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
+                            Height="10" Width="10" Margin="2,0,0,0" Padding="0">
                             <TextBlock FontSize="6" FontWeight="Bold" Text="X" />
                         </Button>
                     </StackPanel>
@@ -59,9 +63,11 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBox Text="{Binding RuminationText, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox Text="{Binding NewRuminationDescription, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding AddRunminationCommand}" Key="Return" />
+                                <KeyBinding Command="{Binding AddRunminationCommand}"
+                                            CommandParameter="{Binding}"
+                                            Key="Return" />
                             </TextBox.InputBindings>
                         </TextBox>
                         <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}">
@@ -69,7 +75,7 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                  Margin="0,0,5,0" />
+                                                Margin="0,0,5,0" />
                                         <TextBlock Text="{Binding Description}" />
                                     </StackPanel>
                                 </DataTemplate>
