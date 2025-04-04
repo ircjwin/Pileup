@@ -1,14 +1,21 @@
 ﻿using Piles.Commands;
 using Piles.Models;
+using Piles.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Piles.ViewModels
 {
-    public class PileupViewModel : ViewModelBase
+    internal class PileupViewModel : ViewModelBase
     {
-        private bool _isInserting { get; set; } = false;
+        private Pileup _pileup;
+
+        private readonly ObservableCollection<PileViewModel> _piles;
+        public IEnumerable<PileViewModel> Piles => _piles;
+
+        private bool _isUpdating { get; set; } = false;
 
         private int _currentIndex;
         public int CurrentIndex
@@ -19,103 +26,86 @@ namespace Piles.ViewModels
             }
             set
             {
-                if (value == -1 && _piles.Count > 1)
-                {
-                    return;
-                }
-                if (_isInserting)
-                {
-                    _isInserting = false;
-                    return;
-                }
-                if (value == _piles.Count - 1)
-                {
-                    AddPile();
-                }
+                if (_isUpdating) return;
+
                 _currentIndex = value;
-                OnPropertyChanged(nameof(CurrentIndex));
+
+                if (_currentIndex == _piles.Count - 1)
+                {
+                    this.AddPileCommand.Execute(null);
+                }
             }
         }
 
-        private readonly Pileup _pileup;
+        public ICommand AddPileCommand { get; private set; }
+        public ICommand RemovePileCommand { get; private set; }
+        public ICommand SavePileupCommand { get; }
 
-        private readonly ObservableCollection<PileViewModel> _piles;
+        private readonly IPileService _pileService;
 
-        public IEnumerable<PileViewModel> Piles => _piles;
-
-        public ICommand CreatePileCommand { get; set; }
-
-        public ICommand RemovePileCommand { get; }
-
-        public ICommand RemoveRuminationCommand { get; }
-
-        public ICommand CheckAllCommand { get; }
-
-        public ICommand UncheckAllCommand { get; }
-
-        public PileupViewModel(Pileup pileup)
+        public PileupViewModel(IPileService pileService)
         {
-            _pileup = pileup;
-
-            CreatePileCommand = new CreatePileCommand(pileup);
-            RemovePileCommand = new RemovePileCommand(this);
-            RemoveRuminationCommand = new RemoveRuminationCommand(this);
-            CheckAllCommand = new CheckAllCommand(this);
-            UncheckAllCommand = new UncheckAllCommand(this);
-
             _piles = new ObservableCollection<PileViewModel>();
+
+            SavePileupCommand = new SavePileupCommand();
+            _pileService = pileService;
+        }
+
+        // Consider Lazy<Task>(*some initialization function*) to grab everything from database
+        // Lazy<task>.Value will be a Task object that needs unwrapped by 'await'
+        // An async function that doesn't return and only assigns needs to be the end of the chain
+
+        public static PileupViewModel CreateViewModel(IPileService pileService)
+        {
+            PileupViewModel pileupViewModel = new PileupViewModel(pileService);
+            pileupViewModel.Load();
+            return pileupViewModel;
+        }
+
+        public async void Load()
+        {
+            ICollection<Pile> piles = await _pileService.GetAllPilesAsync();
+            Pileup pileup = new Pileup(piles);
+            _pileup = pileup;
+            _pileup.PileupChanged += OnPileupChanged;
+
+            AddPileCommand = new AddPileCommand(_pileup);
+            RemovePileCommand = new RemovePileCommand(_pileup);
+
+            if (_pileup.Piles.Count == 0)
+            {
+                this.AddPileCommand.Execute(null);
+                _pileup.Piles.FirstOrDefault().Title = "General";
+            }
+
             UpdatePiles(_pileup.Piles);
         }
 
         public void UpdatePiles(IEnumerable<Pile> piles)
         {
             _piles.Clear();
+            int tabControlIndex = 0;
 
             foreach (Pile pile in piles)
             {
                 PileViewModel pileViewModel = new PileViewModel(pile);
+                pileViewModel.TabControlIndex = tabControlIndex;
                 _piles.Add(pileViewModel);
+
+                tabControlIndex++;
             }
 
-            Pile addPile = new Pile("+", new ObservableCollection<Rumination>());
+            Pile addPile = new Pile(-1, default, "+", new ObservableCollection<Rumination>());
             PileViewModel addPileViewModel = new PileViewModel(addPile);
             addPileViewModel.IsRemovable = false;
             _piles.Add(addPileViewModel);
         }
 
-        private void AddPile()
+        private void OnPileupChanged(Pileup pileup)
         {
-            Pile newPile = new Pile("New Pile", new ObservableCollection<Rumination>());
-            PileViewModel newPileViewModel = new PileViewModel(newPile);
-            _isInserting = true;
-            _piles.Insert(_piles.Count - 1, newPileViewModel);
-            CurrentIndex = _piles.Count - 2;
-        }
-
-        public void RemovePile(PileViewModel pileViewModel)
-        {
-            _piles.Remove(pileViewModel);
-        }
-
-        public void RemoveChecked()
-        {
-            _piles[CurrentIndex].RemoveRumination();
-        }
-
-        public void CheckAll()
-        {
-            foreach (RuminationViewModel ruminationViewModel in _piles[CurrentIndex].Ruminations)
-            {
-                ruminationViewModel.CheckRumination();
-            }
-        }
-
-        public void UncheckAll()
-        {
-            foreach (RuminationViewModel ruminationViewModel in _piles[CurrentIndex].Ruminations)
-            {
-                ruminationViewModel.UncheckRumination();
-            }
+            _isUpdating = true;
+            UpdatePiles(pileup.Piles);
+            _isUpdating = false;
         }
     }
 }

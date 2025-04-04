@@ -8,7 +8,7 @@ namespace Piles.ViewModels
 
         public string Description => _rumination.Description;
 
-        private bool _isChecked;
+        private bool _isChecked = false;
         public bool IsChecked
         {
             get
@@ -18,7 +18,7 @@ namespace Piles.ViewModels
             set
             {
                 _isChecked = value;
-                OnPropertyChanged(nameof(IsChecked));
+                OnPropertyChanged();
             }
         }
 

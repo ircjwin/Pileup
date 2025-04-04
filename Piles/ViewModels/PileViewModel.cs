@@ -1,6 +1,5 @@
 ﻿using Piles.Commands;
 using Piles.Models;
-using Piles.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -9,6 +8,27 @@ namespace Piles.ViewModels
 {
     public class PileViewModel : ViewModelBase
     {
+        private readonly Pile _pile;
+
+        public string Title => _pile.Title;
+
+        private readonly ObservableCollection<RuminationViewModel> _ruminations;
+        public IEnumerable<RuminationViewModel> Ruminations => _ruminations;
+
+        private string _newRuminationDescription;
+        public string NewRuminationDescription
+        {
+            get
+            {
+                return _newRuminationDescription;
+            }
+            set
+            {
+                _newRuminationDescription = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _isRemovable = true;
         public bool IsRemovable
         {
@@ -22,38 +42,37 @@ namespace Piles.ViewModels
             }
         }
 
-        private string _ruminationText;
-        public string RuminationText
+        private int _tabControlIndex;
+        public int TabControlIndex
         {
             get
             {
-                return _ruminationText;
+                return _tabControlIndex;
             }
             set
             {
-                _ruminationText = value;
-                OnPropertyChanged(nameof(RuminationText));
+                _tabControlIndex = value;
             }
         }
 
-        private readonly Pile _pile;
-
-        public string Title => _pile.Title;
-
-        private readonly ObservableCollection<RuminationViewModel> _ruminations;
-
-        public IEnumerable<RuminationViewModel> Ruminations => _ruminations;
-
         public ICommand AddRunminationCommand { get; }
+        public ICommand RemoveCheckedRuminationsCommand { get; }
+        public ICommand CheckAllRuminationsCommand { get; }
+        public ICommand UncheckAllRuminationsCommand { get; }
 
-        public PileViewModel(Pile pile, IRuminationService ruminationService)
+        public PileViewModel(Pile pile)
         {
-            AddRunminationCommand = new AddRuminationCommand(this);
+            _ruminations = new ObservableCollection<RuminationViewModel>();
+
+            AddRunminationCommand = new AddRuminationCommand(pile);
+            RemoveCheckedRuminationsCommand = new RemoveCheckedRuminationsCommand(pile, _ruminations);
+            CheckAllRuminationsCommand = new CheckAllRuminationsCommand(_ruminations);
+            UncheckAllRuminationsCommand = new UncheckAllRuminationsCommand(_ruminations);
 
             _pile = pile;
-            _ruminations = new ObservableCollection<RuminationViewModel>();
-            UpdateRuminations(_pile.Ruminations);
+            _pile.PileChanged += OnPileChanged;
 
+            UpdateRuminations(_pile.Ruminations);
         }
 
         public void UpdateRuminations(IEnumerable<Rumination> ruminations)
@@ -67,20 +86,9 @@ namespace Piles.ViewModels
             }
         }
 
-        public void AddRumination(RuminationViewModel ruminationViewModel)
+        private void OnPileChanged(Pile pile)
         {
-            _ruminations.Add(ruminationViewModel);
-        }
-
-        public void RemoveRumination()
-        {
-            for (int i = _ruminations.Count - 1; i >= 0; i--)
-            {
-                if (_ruminations[i].IsChecked)
-                {
-                    _ruminations.Remove(_ruminations[i]);
-                }
-            }
+            UpdateRuminations(pile.Ruminations);
         }
     }
 }
