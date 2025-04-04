@@ -4,19 +4,17 @@ namespace Piles.Models
 {
     public class Rumination
     {
+        public int Origin { get; init; }
+
+        public DateTime CreatedOn { get; init; }
+
         public string Description { get; set; }
 
-        // TODO: Track how long rumination has been oustanding
-        public DateTime CreatedOn {  get; init; }
-
-        // TODO: Track number of times rumination has been rewritten
-        public uint Duplicates { get; set; }
-
-        public Rumination(string description, uint duplicates = default, DateTime createdOn = default)
+        public Rumination(int origin, DateTime createdOn, string description)
         {
-            Description = description;
-            Duplicates = duplicates;
+            Origin = origin;
             CreatedOn = createdOn;
+            Description = description;
         }
     }
 }

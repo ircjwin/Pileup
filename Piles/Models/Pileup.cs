@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Piles.Models
 {
     public class Pileup
     {
         public ICollection<Pile> Piles { get; set; }
+
+        public event Action<Pileup> PileupChanged;
 
         public Pileup(ICollection<Pile> piles)
         {
@@ -14,18 +17,20 @@ namespace Piles.Models
         public void AddPile()
         {
             List<Rumination> ruminations = new List<Rumination>();
-            Pile pile = new Pile("New Pile", ruminations);
+            Pile pile = new Pile(Piles.Count, DateTime.Now, "New Pile", ruminations);
             Piles.Add(pile);
+            OnPileupChanged();
         }
 
         public void RemovePile(Pile pile)
         {
             Piles.Remove(pile);
+            OnPileupChanged();
         }
 
-        public void UpdatePile(Pile pile, string title)
+        private void OnPileupChanged()
         {
-            pile.Title = title;
+            PileupChanged?.Invoke(this);
         }
     }
 }
