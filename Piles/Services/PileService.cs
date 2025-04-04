@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Piles.Data;
-using Piles.Mappers;
 using Piles.Models;
 using System;
 using System.Collections.Generic;
@@ -10,56 +9,108 @@ namespace Piles.Services
 {
     public class PileService : IPileService
     {
-        private readonly IPilesDbContextFactory _dbContextFactory;
+        private readonly IPilesDbContextFactory _pilesDbContextFactory;
 
-        public PileService(IPilesDbContextFactory dbContextFactory)
+        public PileService(IPilesDbContextFactory pilesDbContextFactory)
         {
-            _dbContextFactory = dbContextFactory;
+            _pilesDbContextFactory = pilesDbContextFactory;
         }
 
-        public async Task CreatePile()
+        public async Task<ICollection<Pile>> GetAllPilesAsync()
         {
-            Pile pile = new Pile("New Pile", new List<Rumination>());
-            PileEntity pileEntity = PileMapper.ToPileEntity(pile);
-
-            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
-            {
-                context.Piles.Add(pileEntity);
-                await context.SaveChangesAsync();
-            }
-        }
-
-        public async Task DeletePile(Pile pile)
-        {
-            PileEntity pileEntity = PileMapper.ToPileEntity(pile);
-
-            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
-            {
-                context.Piles.Remove(pileEntity);
-                await context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<ICollection<Pile>> GetAllPiles()
-        {
+            ICollection<PileDb> pileDbs;
             ICollection<Pile> piles = new List<Pile>();
 
-            using (PilesDbContext context = _dbContextFactory.CreateDbContext())
+            using (PilesDbContext pilesDbContext = _pilesDbContextFactory.CreateDbContext())
             {
-                ICollection<PileEntity> pileEntities = await context.Piles.ToListAsync();
+                pileDbs = await pilesDbContext.Piles
+                    .Include(b => b.Ruminations)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
 
-                foreach (PileEntity pileEntity in pileEntities)
-                {
-                    piles.Add(PileMapper.ToPile(pileEntity));
-                }
+            foreach (PileDb pileDb in pileDbs)
+            {
+                piles.Add(ToDomain(pileDb));
             }
 
             return piles;
         }
 
-        public Task UpdatePile(Pile pile)
+        public async Task<Pile> GetPileByKeyAsync(int origin, DateTime createdOn)
         {
-            throw new NotImplementedException();
+            PileDb pileDb;
+
+            using (PilesDbContext pilesDbContext = _pilesDbContextFactory.CreateDbContext())
+            {
+                pileDb = await pilesDbContext.Piles
+                    .Include(b => b.Ruminations)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(b => b.Origin == origin && b.CreatedOn == createdOn);
+            }
+
+            return ToDomain(pileDb);
+        }
+
+        public void CreatePile(Pile pile, PilesDbContext pilesDbContext)
+        {
+            pilesDbContext.Piles.Add(ToDb(pile));
+        }
+
+        public void UpdatePile(Pile pile, PilesDbContext pilesDbContext)
+        {
+            pilesDbContext.Piles.Entry(ToDb(pile)).State = EntityState.Modified;
+        }
+
+        public void DeletePile(Pile pile, PilesDbContext pilesDbContext)
+        {
+            pilesDbContext.Piles.Remove(ToDb(pile));
+        }
+
+        public void Save(ICollection<(OperationType, Pile)> unsavedPiles)
+        {
+            using (PilesDbContext pilesDbContext = _pilesDbContextFactory.CreateDbContext())
+            {
+                foreach ((OperationType operationType, Pile pile) in unsavedPiles)
+                {
+                    switch (operationType)
+                    {
+                        case (OperationType.Add):
+                            CreatePile(pile, pilesDbContext);
+                            break;
+                        case (OperationType.Modify):
+                            UpdatePile(pile, pilesDbContext);
+                            break;
+                        case (OperationType.Remove):
+                            DeletePile(pile, pilesDbContext);
+                            break;
+                    }
+                }
+                pilesDbContext.SaveChangesAsync();
+            }
+        }
+
+        private Pile ToDomain(PileDb pileDb)
+        {
+            ICollection<Rumination> ruminations = new List<Rumination>();
+
+            foreach (RuminationDb ruminationDb in pileDb.Ruminations)
+            {
+                Rumination rumination = new Rumination(ruminationDb.Origin, ruminationDb.CreatedOn, ruminationDb.Description);
+                ruminations.Add(rumination);
+            }
+
+            return new Pile(pileDb.Origin, pileDb.CreatedOn, pileDb.Title, ruminations);
+        }
+
+        private PileDb ToDb(Pile pile)
+        {
+            return new PileDb()
+            {
+                Origin = pile.Origin,
+                CreatedOn = pile.CreatedOn,
+                Title = pile.Title,
+            };
         }
     }
 }
