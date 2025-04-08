@@ -64,7 +64,7 @@ namespace Piles.ViewModels
 
         public async void Load()
         {
-            ICollection<Pile> piles = await _pileService.GetAllPilesAsync();
+            IList<Pile> piles = await _pileService.GetAllPilesAsync();
             Pileup pileup = new Pileup(piles);
             _pileup = pileup;
             _pileup.PileupChanged += OnPileupChanged;

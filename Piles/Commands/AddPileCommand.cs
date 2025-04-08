@@ -1,5 +1,4 @@
 ﻿using Piles.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Piles.Commands
@@ -52,9 +51,7 @@ namespace Piles.Commands
 
         public override void Undo()
         {
-            IList<Pile> piles = _pileup.Piles.ToList<Pile>();
-            int pileIndex = piles.Count - 2;
-            _pileup.RemovePile(piles[pileIndex]);
+            _pileup.RemovePileAt(_pileup.Piles.Count - 1);
         }
 
         public AddPileCommand Clone()

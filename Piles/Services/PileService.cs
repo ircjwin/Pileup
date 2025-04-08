@@ -17,10 +17,10 @@ namespace Piles.Services
             _pilesDbContextFactory = pilesDbContextFactory;
         }
 
-        public async Task<ICollection<Pile>> GetAllPilesAsync()
+        public async Task<IList<Pile>> GetAllPilesAsync()
         {
             ICollection<PileDb> pileDbs;
-            ICollection<Pile> piles = new List<Pile>();
+            IList<Pile> piles = new List<Pile>();
 
             using (PilesDbContext pilesDbContext = _pilesDbContextFactory.CreateDbContext())
             {
@@ -93,7 +93,7 @@ namespace Piles.Services
 
         private Pile ToDomain(PileDb pileDb)
         {
-            ICollection<Rumination> ruminations = new List<Rumination>();
+            IList<Rumination> ruminations = new List<Rumination>();
 
             foreach (RuminationDb ruminationDb in pileDb.Ruminations)
             {

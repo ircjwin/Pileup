@@ -58,8 +58,7 @@ namespace Piles.Commands
 
         public override void Undo()
         {
-            (Rumination rumination, Pile pile) = _target;
-            _pile.RemoveRumination(rumination);
+            _pile.RemoveRuminationAt(_pile.Ruminations.Count - 1);
         }
 
         public AddRuminationCommand Clone()

@@ -11,11 +11,11 @@ namespace Piles.Models
 
         public string Title { get; set; }
 
-        public ICollection<Rumination> Ruminations { get; set; }
+        public IList<Rumination> Ruminations { get; set; }
 
         public event Action<Pile> PileChanged;
 
-        public Pile(int origin, DateTime createdOn, string title, ICollection<Rumination> ruminations)
+        public Pile(int origin, DateTime createdOn, string title, IList<Rumination> ruminations)
         {
             Origin = origin;
             CreatedOn = createdOn;
@@ -33,6 +33,12 @@ namespace Piles.Models
         public void RemoveRumination(Rumination rumination)
         {
             Ruminations.Remove(rumination);
+            OnPileChanged();
+        }
+
+        public void RemoveRuminationAt(int ruminationIndex)
+        {
+            Ruminations.RemoveAt(ruminationIndex);
             OnPileChanged();
         }
 

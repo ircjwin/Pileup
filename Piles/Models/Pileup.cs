@@ -5,18 +5,18 @@ namespace Piles.Models
 {
     public class Pileup
     {
-        public ICollection<Pile> Piles { get; set; }
+        public IList<Pile> Piles { get; set; }
 
         public event Action<Pileup> PileupChanged;
 
-        public Pileup(ICollection<Pile> piles)
+        public Pileup(IList<Pile> piles)
         {
             Piles = piles;
         }
 
         public void AddPile()
         {
-            List<Rumination> ruminations = new List<Rumination>();
+            IList<Rumination> ruminations = new List<Rumination>();
             Pile pile = new Pile(Piles.Count, DateTime.Now, "New Pile", ruminations);
             Piles.Add(pile);
             OnPileupChanged();
@@ -25,6 +25,12 @@ namespace Piles.Models
         public void RemovePile(Pile pile)
         {
             Piles.Remove(pile);
+            OnPileupChanged();
+        }
+
+        public void RemovePileAt(int pileIndex)
+        {
+            Piles.RemoveAt(pileIndex);
             OnPileupChanged();
         }
 

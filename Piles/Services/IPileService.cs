@@ -9,7 +9,7 @@ namespace Piles.Services
 {
     public interface IPileService
     {
-        Task<ICollection<Pile>> GetAllPilesAsync();
+        Task<IList<Pile>> GetAllPilesAsync();
         Task<Pile> GetPileByKeyAsync(int origin, DateTime createdOn);
         void CreatePile(Pile pile, PilesDbContext pilesDbContext);
         void UpdatePile(Pile pile, PilesDbContext pilesDbContext);
