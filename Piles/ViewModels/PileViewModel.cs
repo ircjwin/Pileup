@@ -8,9 +8,40 @@ namespace Piles.ViewModels
 {
     public class PileViewModel : ViewModelBase
     {
+        private bool _isTitleReadOnly = true;
+        public bool IsTitleReadOnly
+        {
+            get { return _isTitleReadOnly; }
+            set
+            { 
+                _isTitleReadOnly = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isTitleHittable = false;
+        public bool IsTitleHittable
+        {
+            get { return _isTitleHittable; }
+            set
+            { 
+                _isTitleHittable = value;
+                OnPropertyChanged();
+            }
+        }
+
         private readonly Pile _pile;
 
-        public string Title => _pile.Title;
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
+        }
 
         private readonly ObservableCollection<RuminationViewModel> _ruminations;
         public IEnumerable<RuminationViewModel> Ruminations => _ruminations;
@@ -59,18 +90,22 @@ namespace Piles.ViewModels
         public ICommand RemoveCheckedRuminationsCommand { get; }
         public ICommand CheckAllRuminationsCommand { get; }
         public ICommand UncheckAllRuminationsCommand { get; }
+        public ICommand UpdatePileCommand { get; }
+        public ICommand UpdatePileTitleCommand { get; }
 
         public PileViewModel(Pile pile)
         {
+            _pile = pile;
+            _title = pile.Title;
+            _pile.PileChanged += OnPileChanged;
             _ruminations = new ObservableCollection<RuminationViewModel>();
 
             AddRunminationCommand = new AddRuminationCommand(pile);
             RemoveCheckedRuminationsCommand = new RemoveCheckedRuminationsCommand(pile, _ruminations);
             CheckAllRuminationsCommand = new CheckAllRuminationsCommand(_ruminations);
             UncheckAllRuminationsCommand = new UncheckAllRuminationsCommand(_ruminations);
-
-            _pile = pile;
-            _pile.PileChanged += OnPileChanged;
+            UpdatePileCommand = new UpdatePileCommand(this);
+            UpdatePileTitleCommand = new UpdatePileTitleCommand(_pile);
 
             UpdateRuminations(_pile.Ruminations);
         }

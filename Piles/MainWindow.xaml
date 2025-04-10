@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Piles"
+        xmlns:converters="clr-namespace:Piles.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="400">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -47,14 +49,27 @@
                     SelectedIndex="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}"
                     ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}"
                     Grid.Row="1" Grid.Column="1" Margin="5">
-            <TabControl.ItemTemplate >
+            <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Title}" />
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding UpdatePileCommand}" />
+                        </StackPanel.InputBindings>
+                        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                 IsReadOnly="{Binding IsTitleReadonly, UpdateSourceTrigger=PropertyChanged}"
+                                 IsHitTestVisible="{Binding IsTitleHittable, UpdateSourceTrigger=PropertyChanged}"
+                                 BorderBrush="{Binding IsTitleReadOnly, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
+                                 Focusable="{Binding IsTitleHittable}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding UpdatePileTitleCommand}"
+                                            CommandParameter="{Binding}"
+                                            Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                         <Button Command="{Binding ElementName=MainTabControl, Path=DataContext.RemovePileCommand}"
-                            CommandParameter="{Binding}"
-                            Visibility="{Binding IsRemovable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
-                            Height="10" Width="10" Margin="2,0,0,0" Padding="0">
+                                CommandParameter="{Binding}"
+                                Visibility="{Binding IsRemovable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
+                                Height="10" Width="10" Margin="2,0,0,0" Padding="0">
                             <TextBlock FontSize="6" FontWeight="Bold" Text="X" />
                         </Button>
                     </StackPanel>
