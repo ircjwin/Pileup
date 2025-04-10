@@ -100,8 +100,8 @@ namespace Piles.ViewModels
             _pile.PileChanged += OnPileChanged;
             _ruminations = new ObservableCollection<RuminationViewModel>();
 
-            AddRunminationCommand = new AddRuminationCommand(pile);
-            RemoveCheckedRuminationsCommand = new RemoveCheckedRuminationsCommand(pile, _ruminations);
+            AddRunminationCommand = new AddRuminationCommand(_pile);
+            RemoveCheckedRuminationsCommand = new RemoveCheckedRuminationsCommand(_pile, _ruminations);
             CheckAllRuminationsCommand = new CheckAllRuminationsCommand(_ruminations);
             UncheckAllRuminationsCommand = new UncheckAllRuminationsCommand(_ruminations);
             UpdatePileCommand = new UpdatePileCommand(this);

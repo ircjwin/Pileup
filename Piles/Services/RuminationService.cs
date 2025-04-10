@@ -53,14 +53,21 @@ namespace Piles.Services
             return ToDomain(ruminationDb);
         }
 
+        public async Task<RuminationDb> GetRuminationByKeyAsync(int origin, DateTime createdOn, PilesDbContext pilesDbContext)
+        {
+            return await pilesDbContext.Ruminations
+                .FirstOrDefaultAsync(c => c.Origin == origin && c.CreatedOn == createdOn);
+        }
+
         public void CreateRumination(Rumination rumination, Pile pile, PilesDbContext pilesDbContext)
         {
             pilesDbContext.Ruminations.Add(ToDb(rumination, pile));
         }
 
-        public void UpdateRumination(Rumination rumination, Pile pile, PilesDbContext pilesDbContext)
+        public async void UpdateRumination(Rumination rumination, Pile pile, PilesDbContext pilesDbContext)
         {
-            pilesDbContext.Ruminations.Entry(ToDb(rumination, pile)).State = EntityState.Modified;
+            RuminationDb ruminationDb = await GetRuminationByKeyAsync(rumination.Origin, rumination.CreatedOn, pilesDbContext);
+            ruminationDb.Description = rumination.Description;
         }
 
         public void DeleteRumination(Rumination rumination, Pile pile, PilesDbContext pilesDbContext)

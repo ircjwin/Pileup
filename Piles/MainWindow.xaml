@@ -88,10 +88,23 @@
                         <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                                        <StackPanel.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding UpdateRuminationCommand}" />
+                                        </StackPanel.InputBindings>
                                         <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                 Margin="0,0,5,0" />
-                                        <TextBlock Text="{Binding Description}" />
+                                        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsReadOnly="{Binding IsDescriptionReadonly, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsHitTestVisible="{Binding IsDescriptionHittable, UpdateSourceTrigger=PropertyChanged}"
+                                                 BorderBrush="{Binding IsDescriptionReadonly, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
+                                                 Focusable="{Binding IsDescriptionHittable}">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding UpdateRuminationDescriptionCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            Key="Return" />
+                                            </TextBox.InputBindings>
+                                        </TextBox>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
