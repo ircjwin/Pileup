@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Piles"
-        xmlns:converters="clr-namespace:Piles.Converters"
+        xmlns:conv="clr-namespace:Piles.Converters"
+        xmlns:attch="clr-namespace:Piles.AttachedProperties"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="400">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
+        <conv:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -56,6 +57,8 @@
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding UpdatePileCommand}" />
                         </StackPanel.InputBindings>
                         <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                 attch:FocusExtension.IsFocused="{Binding IsTitleHittable}"
+                                 Background="Transparent"
                                  IsReadOnly="{Binding IsTitleReadonly, UpdateSourceTrigger=PropertyChanged}"
                                  IsHitTestVisible="{Binding IsTitleHittable, UpdateSourceTrigger=PropertyChanged}"
                                  BorderBrush="{Binding IsTitleReadOnly, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
@@ -95,6 +98,8 @@
                                         <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                 Margin="0,0,5,0" />
                                         <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                                 attch:FocusExtension.IsFocused="{Binding IsDescriptionHittable}"
+                                                 Background="Transparent"                                                 
                                                  IsReadOnly="{Binding IsDescriptionReadonly, UpdateSourceTrigger=PropertyChanged}"
                                                  IsHitTestVisible="{Binding IsDescriptionHittable, UpdateSourceTrigger=PropertyChanged}"
                                                  BorderBrush="{Binding IsDescriptionReadonly, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
