@@ -6,7 +6,12 @@ namespace Piles.AttachedProperties
     public static class FocusExtension
     {
         public static readonly DependencyProperty IsFocusedProperty = 
-            DependencyProperty.RegisterAttached("IsFocused", typeof(bool), typeof(FocusExtension), new UIPropertyMetadata(false, OnIsFocusedPropertyChanged));
+            DependencyProperty.RegisterAttached(
+                "IsFocused",
+                typeof(bool),
+                typeof(FocusExtension),
+                new UIPropertyMetadata(false, OnIsFocusedPropertyChanged)
+            );
 
         public static bool GetIsFocused(DependencyObject obj)
         {
