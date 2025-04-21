@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:Piles"
         xmlns:conv="clr-namespace:Piles.Converters"
         xmlns:attprop="clr-namespace:Piles.AttachedProperties"
@@ -15,12 +16,12 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="30" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="3" Height="18" VerticalAlignment="Top">
             <MenuItem Header="File">
@@ -49,7 +50,9 @@
         <TabControl x:Name="MainTabControl"
                     SelectedIndex="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}"
                     ItemsSource="{Binding Piles, UpdateSourceTrigger=PropertyChanged}"
-                    Grid.Row="1" Grid.Column="1" Margin="5">
+                    Grid.Row="1" Grid.Column="1" Margin="5"
+                    AllowDrop="True"
+                    attprop:TabControlDragDropBehavior.EnableDragDrop="True">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Background="Transparent">
@@ -81,14 +84,18 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBox Text="{Binding NewRuminationDescription, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox Text="{Binding NewRuminationDescription, UpdateSourceTrigger=PropertyChanged}"
+                                 MinHeight="20">
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding AddRunminationCommand}"
                                             CommandParameter="{Binding}"
                                             Key="Return" />
                             </TextBox.InputBindings>
                         </TextBox>
-                        <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}"
+                                  Height="{Binding ElementName=MainTabControl, Path=ActualHeight}"
+                                  AllowDrop="true"
+                                  attprop:ListViewDragDropBehavior.EnableDragDrop="True">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Background="Transparent">
