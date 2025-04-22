@@ -1,4 +1,6 @@
-﻿namespace Piles.Commands
+﻿using Piles.ViewModels;
+
+namespace Piles.Commands
 {
     public class SavePileupCommand : CommandBase
     {
@@ -6,7 +8,7 @@
 
         public override void Execute(object parameter)
         {
-            CommandManager.Instance.Save();
+            CommandStackViewModel.Instance.Save();
         }
     }
 }

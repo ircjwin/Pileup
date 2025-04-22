@@ -45,7 +45,7 @@ namespace Piles.Commands
             _newTitle = pileViewModel.Title;
             _target.Title = _newTitle;
             pileViewModel.UpdatePileCommand.Execute(null);
-            CommandManager.Instance.AddCommand(this.Clone());
+            CommandStackViewModel.Instance.AddCommand(this.Clone());
         }
 
         public override void Redo()

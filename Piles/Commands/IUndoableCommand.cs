@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using Piles.ViewModels;
+using System.Windows.Input;
 
 namespace Piles.Commands
 {

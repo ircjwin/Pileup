@@ -57,7 +57,7 @@ namespace Piles.Commands
                 iterCount++;
             }
 
-            CommandManager.Instance.AddCommand(this.Clone());
+            CommandStackViewModel.Instance.AddCommand(this.Clone());
         }
 
         public override void Redo()

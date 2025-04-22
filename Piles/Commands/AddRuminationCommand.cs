@@ -47,7 +47,7 @@ namespace Piles.Commands
             _target = new Tuple<Rumination, Pile>(_pile.Ruminations.LastOrDefault(), _pile);
             pileViewModel.NewRuminationDescription = "";
 
-            CommandManager.Instance.AddCommand(this.Clone());
+            CommandStackViewModel.Instance.AddCommand(this.Clone());
         }
 
         public override void Redo()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Piles.ViewModels;
+using System;
 
 namespace Piles.Commands
 {

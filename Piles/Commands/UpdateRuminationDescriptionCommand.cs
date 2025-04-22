@@ -47,7 +47,7 @@ namespace Piles.Commands
             _newDescription = ruminationViewModel.Description;
             _target.Item1.Description = _newDescription;
             ruminationViewModel.UpdateRuminationCommand.Execute(null);
-            CommandManager.Instance.AddCommand(this.Clone());
+            CommandStackViewModel.Instance.AddCommand(this.Clone());
         }
 
         public override void Redo()

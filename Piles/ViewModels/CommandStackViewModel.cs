@@ -1,10 +1,11 @@
-﻿using Piles.DbContexts;
+﻿using Piles.Commands;
+using Piles.DbContexts;
 using Piles.Models;
 using Piles.Services;
 using System;
 using System.Collections.Generic;
 
-namespace Piles.Commands
+namespace Piles.ViewModels
 {
     public enum OperationType
     {
@@ -21,15 +22,15 @@ namespace Piles.Commands
         RuminationCollection,
     }
 
-    public class CommandManager
+    public class CommandStackViewModel
     {
         private IList<IUndoableCommand> _undoableCommands = new List<IUndoableCommand>();
         private int _undoIndex;
         private readonly IPilesDbContextFactory _pilesDbContextFactory = new PilesDbContextFactory("Data Source=piles.db");
 
-        private static readonly Lazy<CommandManager> lazy = new Lazy<CommandManager>(() => new CommandManager());
-        public static CommandManager Instance { get { return lazy.Value; } }
-        private CommandManager() { }
+        private static readonly Lazy<CommandStackViewModel> lazy = new Lazy<CommandStackViewModel>(() => new CommandStackViewModel());
+        public static CommandStackViewModel Instance { get { return lazy.Value; } }
+        private CommandStackViewModel() { }
 
         public void AddCommand(IUndoableCommand undoRedoCommand)
         {

@@ -1,4 +1,5 @@
 ﻿using Piles.Models;
+using Piles.ViewModels;
 using System.Linq;
 
 namespace Piles.Commands
@@ -41,7 +42,7 @@ namespace Piles.Commands
             _pileup.AddPile();
             _target = _pileup.Piles.LastOrDefault();
 
-            CommandManager.Instance.AddCommand(this.Clone());
+            CommandStackViewModel.Instance.AddCommand(this.Clone());
         }
 
         public override void Redo()
