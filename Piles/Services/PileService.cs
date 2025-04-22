@@ -4,6 +4,7 @@ using Piles.Models;
 using Piles.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Piles.Services
@@ -60,6 +61,11 @@ namespace Piles.Services
 
         public void UpdatePile(Pile pile, PilesDbContext pilesDbContext)
         {
+            foreach (var entry in pilesDbContext.ChangeTracker.Entries<PileDb>())
+            {
+                if (entry.Entity.Origin == pile.Origin && entry.Entity.CreatedOn == pile.CreatedOn) return;
+            }
+
             pilesDbContext.Piles.Entry(ToDb(pile)).State = EntityState.Modified;
         }
 
