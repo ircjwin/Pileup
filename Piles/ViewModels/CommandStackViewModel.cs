@@ -24,7 +24,7 @@ namespace Piles.ViewModels
 
     public class CommandStackViewModel
     {
-        private IList<IUndoableCommand> _undoableCommands = new List<IUndoableCommand>();
+        private IList<IUndoable> _undoableCommands = new List<IUndoable>();
         private int _undoIndex;
         private readonly IPilesDbContextFactory _pilesDbContextFactory = new PilesDbContextFactory("Data Source=piles.db");
 
@@ -32,7 +32,7 @@ namespace Piles.ViewModels
         public static CommandStackViewModel Instance { get { return lazy.Value; } }
         private CommandStackViewModel() { }
 
-        public void AddCommand(IUndoableCommand undoRedoCommand)
+        public void AddCommand(IUndoable undoRedoCommand)
         {
             _undoableCommands.Add(undoRedoCommand);
             _undoIndex = _undoableCommands.Count - 1;

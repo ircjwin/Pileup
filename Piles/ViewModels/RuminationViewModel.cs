@@ -6,26 +6,22 @@ namespace Piles.ViewModels
 {
     public class RuminationViewModel : ViewModelBase
     {
-        private bool _isDescriptionReadOnly = true;
-        public bool IsDescriptionReadOnly
+        private bool _isEditing = false;
+        public bool IsEditing
         {
-            get { return _isDescriptionReadOnly; }
+            get { return _isEditing; }
             set
             {
-                _isDescriptionReadOnly = value;
+                _isEditing = value;
+
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsNotEditing));
             }
         }
 
-        private bool _isDescriptionHittable = false;
-        public bool IsDescriptionHittable
+        public bool IsNotEditing
         {
-            get { return _isDescriptionHittable; }
-            set
-            {
-                _isDescriptionHittable = value;
-                OnPropertyChanged();
-            }
+            get { return !_isEditing; }
         }
 
         private readonly Rumination _rumination;

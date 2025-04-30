@@ -8,26 +8,22 @@ namespace Piles.ViewModels
 {
     public class PileViewModel : ViewModelBase
     {
-        private bool _isTitleReadOnly = true;
-        public bool IsTitleReadOnly
+        private bool _isEditing = false;
+        public bool IsEditing
         {
-            get { return _isTitleReadOnly; }
+            get { return _isEditing; }
             set
-            { 
-                _isTitleReadOnly = value;
+            {
+                _isEditing = value;
+
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsNotEditing));
             }
         }
 
-        private bool _isTitleHittable = false;
-        public bool IsTitleHittable
+        public bool IsNotEditing
         {
-            get { return _isTitleHittable; }
-            set
-            { 
-                _isTitleHittable = value;
-                OnPropertyChanged();
-            }
+            get { return !_isEditing; }
         }
 
         private readonly Pile _pile;

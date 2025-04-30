@@ -13,8 +13,7 @@ namespace Piles.Commands
 
         public override void Execute(object parameter)
         {
-            _pileViewModel.IsTitleReadOnly = !_pileViewModel.IsTitleReadOnly;
-            _pileViewModel.IsTitleHittable = !_pileViewModel.IsTitleHittable;
+            _pileViewModel.IsEditing = !_pileViewModel.IsEditing;
         }
     }
 }

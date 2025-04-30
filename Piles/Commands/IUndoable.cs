@@ -1,9 +1,8 @@
 ﻿using Piles.ViewModels;
-using System.Windows.Input;
 
 namespace Piles.Commands
 {
-    public interface IUndoableCommand : ICommand
+    public interface IUndoable
     {
         OperationType OperationType { get; }
         TargetType TargetType { get; }

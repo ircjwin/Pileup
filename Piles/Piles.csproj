@@ -17,6 +17,7 @@
     <Compile Remove="AttachedProperties\DropTargetExtension.cs" />
     <Compile Remove="AttachedProperties\ListViewDragDropExtension.cs" />
     <Compile Remove="AttachedProperties\TestExtension.cs" />
+    <Compile Remove="ThonSong.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
@@ -40,9 +41,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="pythonnet" Version="3.0.5" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="8.1.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

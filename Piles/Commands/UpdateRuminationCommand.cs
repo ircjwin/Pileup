@@ -13,8 +13,7 @@ namespace Piles.Commands
 
         public override void Execute(object parameter)
         {
-            _ruminationViewModel.IsDescriptionReadOnly = !_ruminationViewModel.IsDescriptionReadOnly;
-            _ruminationViewModel.IsDescriptionHittable = !_ruminationViewModel.IsDescriptionHittable;
+            _ruminationViewModel.IsEditing = !_ruminationViewModel.IsEditing;
         }
     }
 }
