@@ -1,6 +1,7 @@
 ﻿using Piles.Commands;
 using Piles.Models;
 using Piles.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -43,11 +44,14 @@ namespace Piles.ViewModels
 
         private readonly IPileService _pileService;
 
-        public PileupViewModel(IPileService pileService)
+        private Func<Pile, PileViewModel> _createPileViewModel;
+
+        public PileupViewModel(Func<Pile, PileViewModel> createPileViewModel, IPileService pileService)
         {
             _piles = new ObservableCollection<PileViewModel>();
 
             SavePileupCommand = new SavePileupCommand();
+            _createPileViewModel = createPileViewModel;
             _pileService = pileService;
         }
 
@@ -55,22 +59,22 @@ namespace Piles.ViewModels
         // Lazy<task>.Value will be a Task object that needs unwrapped by 'await'
         // An async function that doesn't return and only assigns needs to be the end of the chain
 
-        public static PileupViewModel CreateViewModel(IPileService pileService)
+        public static PileupViewModel CreateViewModel(Func<Pile, PileViewModel> createPileViewModel, IPileService pileService, ICommandListener commandListener)
         {
-            PileupViewModel pileupViewModel = new PileupViewModel(pileService);
-            pileupViewModel.Load();
+            PileupViewModel pileupViewModel = new PileupViewModel(createPileViewModel, pileService);
+            pileupViewModel.Load(commandListener);
             return pileupViewModel;
         }
 
-        public async void Load()
+        public async void Load(ICommandListener commandListener)
         {
             IList<Pile> piles = await _pileService.GetAllPilesAsync();
             Pileup pileup = new Pileup(piles);
             _pileup = pileup;
             _pileup.PileupChanged += OnPileupChanged;
 
-            AddPileCommand = new AddPileCommand(_pileup);
-            RemovePileCommand = new RemovePileCommand(_pileup);
+            AddPileCommand = new AddPileCommand(_pileup, commandListener);
+            RemovePileCommand = new RemovePileCommand(_pileup, commandListener);
 
             if (_pileup.Piles.Count == 0)
             {
@@ -88,7 +92,7 @@ namespace Piles.ViewModels
 
             foreach (Pile pile in piles)
             {
-                PileViewModel pileViewModel = new PileViewModel(pile);
+                PileViewModel pileViewModel = _createPileViewModel(pile);
                 pileViewModel.TabControlIndex = tabControlIndex;
                 _piles.Add(pileViewModel);
 
@@ -96,7 +100,7 @@ namespace Piles.ViewModels
             }
 
             Pile addPile = new Pile(-1, default, "+", new ObservableCollection<Rumination>());
-            PileViewModel addPileViewModel = new PileViewModel(addPile);
+            PileViewModel addPileViewModel = _createPileViewModel(addPile);
             addPileViewModel.IsRemovable = false;
             _piles.Add(addPileViewModel);
         }

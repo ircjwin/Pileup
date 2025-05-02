@@ -1,5 +1,6 @@
 ﻿using Piles.Commands;
 using Piles.Models;
+using System;
 using System.Windows.Input;
 
 namespace Piles.ViewModels
@@ -54,13 +55,13 @@ namespace Piles.ViewModels
         public ICommand UpdateRuminationCommand { get; }
         public ICommand UpdateRuminationDescriptionCommand { get; }
 
-        public RuminationViewModel(Rumination rumination)
+        public RuminationViewModel(Rumination rumination, Pile pile, ICommandListener commandListener)
         {
             _rumination = rumination;
             _description = rumination.Description;
 
             UpdateRuminationCommand = new UpdateRuminationCommand(this);
-            UpdateRuminationDescriptionCommand = new UpdateRuminationDescriptionCommand(_rumination);
+            UpdateRuminationDescriptionCommand = new UpdateRuminationDescriptionCommand(_rumination, pile, commandListener);
         }
 
         public void CheckRumination()

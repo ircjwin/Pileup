@@ -22,9 +22,11 @@ namespace Piles.ViewModels
         RuminationCollection,
     }
 
-    public class CommandStackViewModel
+    public class CommandStackViewModel : ICommandListener
     {
-        private IList<IUndoable> _undoableCommands = new List<IUndoable>();
+        private IList<IUndoableCommand> _commandSubscriptions = new List<IUndoableCommand>();
+
+        private IList<IUndoableCommand> _undoableCommands = new List<IUndoableCommand>();
         private int _undoIndex;
         private readonly IPilesDbContextFactory _pilesDbContextFactory = new PilesDbContextFactory("Data Source=piles.db");
 
@@ -32,7 +34,7 @@ namespace Piles.ViewModels
         public static CommandStackViewModel Instance { get { return lazy.Value; } }
         private CommandStackViewModel() { }
 
-        public void AddCommand(IUndoable undoRedoCommand)
+        public void AddCommand(IUndoableCommand undoRedoCommand)
         {
             _undoableCommands.Add(undoRedoCommand);
             _undoIndex = _undoableCommands.Count - 1;
@@ -98,6 +100,20 @@ namespace Piles.ViewModels
             IRuminationService ruminationService = new RuminationService(_pilesDbContextFactory);
             pileService.Save(unsavedPiles);
             ruminationService.Save(unsavedRuminations);
+        }
+
+        private void OnExecuted(object sender, EventArgs e)
+        {
+            IUndoableCommand undoableCommand = sender as IUndoableCommand;
+            IUndoableCommand undoableCommandDeepCopy = undoableCommand.Clone() as IUndoableCommand;
+            _undoableCommands.Add(undoableCommandDeepCopy);
+            _undoIndex = _undoableCommands.Count - 1;
+        }
+
+        public void Listen(IUndoableCommand undoableCommand)
+        {
+            undoableCommand.Executed += OnExecuted;
+            _commandSubscriptions.Add(undoableCommand);
         }
     }
 }

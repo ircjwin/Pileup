@@ -1,5 +1,6 @@
 ﻿using Piles.Commands;
 using Piles.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -82,26 +83,30 @@ namespace Piles.ViewModels
             }
         }
 
-        public ICommand AddRunminationCommand { get; }
+        public ICommand AddRuminationCommand { get; }
         public ICommand RemoveCheckedRuminationsCommand { get; }
         public ICommand CheckAllRuminationsCommand { get; }
         public ICommand UncheckAllRuminationsCommand { get; }
         public ICommand UpdatePileCommand { get; }
         public ICommand UpdatePileTitleCommand { get; }
 
-        public PileViewModel(Pile pile)
+        private Func<Rumination, Pile, RuminationViewModel> _createRuminationViewModel;
+
+        public PileViewModel(Pile pile, Func<Rumination, Pile, RuminationViewModel> createRuminationViewModel, ICommandListener commandListener)
         {
             _pile = pile;
             _title = pile.Title;
             _pile.PileChanged += OnPileChanged;
             _ruminations = new ObservableCollection<RuminationViewModel>();
+            _createRuminationViewModel = createRuminationViewModel;
 
-            AddRunminationCommand = new AddRuminationCommand(_pile);
-            RemoveCheckedRuminationsCommand = new RemoveCheckedRuminationsCommand(_pile, _ruminations);
+            AddRuminationCommand = new AddRuminationCommand(_pile, commandListener);
+            RemoveCheckedRuminationsCommand = new RemoveCheckedRuminationsCommand(_pile, _ruminations, commandListener);
+            UpdatePileTitleCommand = new UpdatePileTitleCommand(_pile, commandListener);
+
             CheckAllRuminationsCommand = new CheckAllRuminationsCommand(_ruminations);
             UncheckAllRuminationsCommand = new UncheckAllRuminationsCommand(_ruminations);
             UpdatePileCommand = new UpdatePileCommand(this);
-            UpdatePileTitleCommand = new UpdatePileTitleCommand(_pile);
 
             UpdateRuminations(_pile.Ruminations);
         }
@@ -112,7 +117,7 @@ namespace Piles.ViewModels
 
             foreach (Rumination rumination in ruminations)
             {
-                RuminationViewModel ruminationViewModel = new RuminationViewModel(rumination);
+                RuminationViewModel ruminationViewModel = _createRuminationViewModel(rumination, _pile);
                 _ruminations.Add(ruminationViewModel);
             }
         }

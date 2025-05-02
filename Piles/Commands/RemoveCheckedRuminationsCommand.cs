@@ -36,10 +36,12 @@ namespace Piles.Commands
             _target = target;
         }
 
-        public RemoveCheckedRuminationsCommand(Pile pile, ICollection<RuminationViewModel> ruminations)
+        public RemoveCheckedRuminationsCommand(Pile pile, ICollection<RuminationViewModel> ruminations, ICommandListener commandListener)
         {
             _pile = pile;
             _ruminationViewModels = ruminations;
+
+            commandListener.Listen(this);
         }
 
         public override void Execute(object parameter)
@@ -60,7 +62,7 @@ namespace Piles.Commands
                 iterCount--;
             }
 
-            CommandStackViewModel.Instance.AddCommand(this.Clone());
+            OnExecuted();
         }
 
         public override void Redo()
@@ -92,7 +94,7 @@ namespace Piles.Commands
             _pile.Ruminations = ruminations;
         }
 
-        public RemoveCheckedRuminationsCommand Clone()
+        public override RemoveCheckedRuminationsCommand Clone()
         {
             return new RemoveCheckedRuminationsCommand(_pile, _removedRuminations, _target);
         }

@@ -27,27 +27,29 @@ namespace Piles.Commands
         private string _oldDescription;
         private string _newDescription;
 
-        public UpdateRuminationDescriptionCommand(Rumination rumination)
+        public UpdateRuminationDescriptionCommand(Rumination rumination, Pile pile, ICommandListener commandListener)
         {
-            Pile pile = new Pile(default, default, default, default);
             _target = Tuple.Create(rumination, pile);
-            _oldDescription = rumination.Description;
+
+            commandListener.Listen(this);
         }
 
-        public UpdateRuminationDescriptionCommand(Tuple<Rumination, Pile> ruminationPile, string newDescription)
+        public UpdateRuminationDescriptionCommand(Tuple<Rumination, Pile> ruminationPile, string oldDescription, string newDescription)
         {
             _target = ruminationPile;
-            _oldDescription = ruminationPile.Item1.Description;
-            _newDescription = newDescription;
+            _oldDescription = oldDescription;
+            _newDescription = newDescription;  
         }
 
         public override void Execute(object parameter)
         {
             RuminationViewModel ruminationViewModel = parameter as RuminationViewModel;
+            _oldDescription = _target.Item1.Description;
             _newDescription = ruminationViewModel.Description;
             _target.Item1.Description = _newDescription;
             ruminationViewModel.UpdateRuminationCommand.Execute(null);
-            CommandStackViewModel.Instance.AddCommand(this.Clone());
+
+            OnExecuted();
         }
 
         public override void Redo()
@@ -60,9 +62,9 @@ namespace Piles.Commands
             _target.Item1.Description = _oldDescription;
         }
 
-        public UpdateRuminationDescriptionCommand Clone()
+        public override UpdateRuminationDescriptionCommand Clone()
         {
-            return new UpdateRuminationDescriptionCommand(_target, _newDescription);
+            return new UpdateRuminationDescriptionCommand(_target, _oldDescription, _newDescription);
         }
     }
 }

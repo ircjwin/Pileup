@@ -35,9 +35,11 @@ namespace Piles.Commands
             _pileIndex = pileIndex;
         }
 
-        public RemovePileCommand(Pileup pileup)
+        public RemovePileCommand(Pileup pileup, ICommandListener commandListener)
         {
             _pileup = pileup;
+
+            commandListener.Listen(this);
         }
 
         public override void Execute(object parameter)
@@ -57,7 +59,7 @@ namespace Piles.Commands
                 iterCount++;
             }
 
-            CommandStackViewModel.Instance.AddCommand(this.Clone());
+            OnExecuted();
         }
 
         public override void Redo()
@@ -82,7 +84,7 @@ namespace Piles.Commands
             _pileup.Piles = piles;
         }
 
-        public RemovePileCommand Clone()
+        public override RemovePileCommand Clone()
         {
             return new RemovePileCommand(_pileup, _target, _pileIndex);
         }

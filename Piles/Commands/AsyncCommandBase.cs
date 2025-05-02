@@ -14,7 +14,7 @@ namespace Piles.Commands
             set
             {
                 _isExecuting = value;
-                OnCanExecutedChanged();
+                OnCanExecuteChanged();
             }
         }
 

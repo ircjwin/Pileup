@@ -33,9 +33,11 @@ namespace Piles.Commands
             _target = ruminationPile;
         }
 
-        public AddRuminationCommand(Pile pile)
+        public AddRuminationCommand(Pile pile, ICommandListener commandListener)
         {
             _pile = pile;
+
+            commandListener.Listen(this);
         }
 
         public override void Execute(object parameter)
@@ -47,7 +49,7 @@ namespace Piles.Commands
             _target = new Tuple<Rumination, Pile>(_pile.Ruminations.LastOrDefault(), _pile);
             pileViewModel.NewRuminationDescription = "";
 
-            CommandStackViewModel.Instance.AddCommand(this.Clone());
+            OnExecuted();
         }
 
         public override void Redo()
@@ -61,7 +63,7 @@ namespace Piles.Commands
             _pile.RemoveRuminationAt(_pile.Ruminations.Count - 1);
         }
 
-        public AddRuminationCommand Clone()
+        public override AddRuminationCommand Clone()
         {
             return new AddRuminationCommand(_pile, _target);
         }

@@ -88,7 +88,7 @@
                         <TextBox Text="{Binding NewRuminationDescription, UpdateSourceTrigger=PropertyChanged}"
                                  MinHeight="20">
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding AddRunminationCommand}"
+                                <KeyBinding Command="{Binding AddRuminationCommand}"
                                             CommandParameter="{Binding}"
                                             Key="Return" />
                             </TextBox.InputBindings>

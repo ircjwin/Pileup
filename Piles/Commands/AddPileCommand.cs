@@ -32,9 +32,11 @@ namespace Piles.Commands
             _target = pile;
         }
 
-        public AddPileCommand(Pileup pileup)
+        public AddPileCommand(Pileup pileup, ICommandListener commandListener)
         {
             _pileup = pileup;
+
+            commandListener.Listen(this);
         }
 
         public override void Execute(object parameter)
@@ -42,7 +44,7 @@ namespace Piles.Commands
             _pileup.AddPile();
             _target = _pileup.Piles.LastOrDefault();
 
-            CommandStackViewModel.Instance.AddCommand(this.Clone());
+            OnExecuted();
         }
 
         public override void Redo()
@@ -55,7 +57,7 @@ namespace Piles.Commands
             _pileup.RemovePileAt(_pileup.Piles.Count - 1);
         }
 
-        public AddPileCommand Clone()
+        public override AddPileCommand Clone()
         {
             return new AddPileCommand(_pileup, _target);
         }

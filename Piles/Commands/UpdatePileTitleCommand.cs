@@ -26,10 +26,12 @@ namespace Piles.Commands
         private string _oldTitle;
         private string _newTitle;
 
-        public UpdatePileTitleCommand(Pile pile)
+        public UpdatePileTitleCommand(Pile pile, ICommandListener commandListener)
         {
             _target = pile;
             _oldTitle = pile.Title;
+
+            commandListener.Listen(this);
         }
 
         public UpdatePileTitleCommand(Pile pile, string newTitle)
@@ -45,7 +47,8 @@ namespace Piles.Commands
             _newTitle = pileViewModel.Title;
             _target.Title = _newTitle;
             pileViewModel.UpdatePileCommand.Execute(null);
-            CommandStackViewModel.Instance.AddCommand(this.Clone());
+
+            OnExecuted();
         }
 
         public override void Redo()
@@ -58,7 +61,7 @@ namespace Piles.Commands
             _target.Title = _oldTitle;
         }
 
-        public UpdatePileTitleCommand Clone()
+        public override UpdatePileTitleCommand Clone()
         {
             return new UpdatePileTitleCommand(_target, _newTitle);
         }
