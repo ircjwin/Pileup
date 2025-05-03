@@ -4,11 +4,16 @@ namespace Piles.Commands
 {
     public class SavePileupCommand : CommandBase
     {
-        public SavePileupCommand() { }
+        private readonly ICommandListener _commandListener;
+
+        public SavePileupCommand(ICommandListener commandListener)
+        {
+            _commandListener = commandListener;
+        }
 
         public override void Execute(object parameter)
         {
-            CommandStackViewModel.Instance.Save();
+            _commandListener.Save();
         }
     }
 }

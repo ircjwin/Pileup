@@ -24,7 +24,7 @@ namespace Piles
                 .AddScoped<IRuminationService, RuminationService>()
 
                 .AddSingleton<IPilesDbContextFactory>(new PilesDbContextFactory(CONNECTION_STRING))
-                .AddSingleton<CommandStackViewModel>(CommandStackViewModel.Instance)
+                .AddSingleton<CommandStackViewModel>((s) => new CommandStackViewModel(s.GetRequiredService<IPilesDbContextFactory>()))
 
                 .AddSingleton<Func<Rumination, Pile, RuminationViewModel>>(
                     (s) => (r, p) => new RuminationViewModel(
@@ -47,9 +47,15 @@ namespace Piles
                         s.GetRequiredService<CommandStackViewModel>()
                 ))
 
+                .AddSingleton<MainViewModel>(
+                    (s) => new MainViewModel(
+                        s.GetRequiredService<PileupViewModel>(), 
+                        s.GetRequiredService<CommandStackViewModel>()
+                ))
+
                 .AddSingleton<MainWindow>((s) => new MainWindow()
                 {
-                    DataContext = s.GetRequiredService<PileupViewModel>()
+                    DataContext = s.GetRequiredService<MainViewModel>()
                 })
                 .BuildServiceProvider();
         }

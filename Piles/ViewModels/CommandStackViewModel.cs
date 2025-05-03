@@ -4,6 +4,8 @@ using Piles.Models;
 using Piles.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 
 namespace Piles.ViewModels
 {
@@ -24,44 +26,21 @@ namespace Piles.ViewModels
 
     public class CommandStackViewModel : ICommandListener
     {
-        private IList<IUndoableCommand> _commandSubscriptions = new List<IUndoableCommand>();
+        private readonly IPilesDbContextFactory _pilesDbContextFactory;
+        private ICollection<IUndoableCommand> _commandSubscriptions = new List<IUndoableCommand>();
 
-        private IList<IUndoableCommand> _undoableCommands = new List<IUndoableCommand>();
-        private int _undoIndex;
-        private readonly IPilesDbContextFactory _pilesDbContextFactory = new PilesDbContextFactory("Data Source=piles.db");
+        private Stack<IUndoableCommand> _undoStack = new Stack<IUndoableCommand>();
+        private Stack<IUndoableCommand> _redoStack = new Stack<IUndoableCommand>();
 
-        private static readonly Lazy<CommandStackViewModel> lazy = new Lazy<CommandStackViewModel>(() => new CommandStackViewModel());
-        public static CommandStackViewModel Instance { get { return lazy.Value; } }
-        private CommandStackViewModel() { }
+        public ICommand UndoCommand { get; }
+        public ICommand RedoCommand { get; }
 
-        public void AddCommand(IUndoableCommand undoRedoCommand)
+        public CommandStackViewModel(IPilesDbContextFactory pilesDbContextFactory)
         {
-            _undoableCommands.Add(undoRedoCommand);
-            _undoIndex = _undoableCommands.Count - 1;
-        }
+            _pilesDbContextFactory = pilesDbContextFactory;
 
-        public void StepThroughCommands(bool back)
-        {
-            if (back)
-            {
-                _undoableCommands[_undoIndex].Undo();
-                _undoIndex--;
-
-                if (_undoIndex < 0)
-                {
-                    _undoIndex = 0;
-                }
-            }
-            else
-            {
-                _undoableCommands[_undoIndex].Redo();
-                _undoIndex++;
-
-                if (_undoIndex >= _undoableCommands.Count)
-                {
-                    _undoIndex = _undoableCommands.Count - 1;
-                }
-            }
+            UndoCommand = new UndoCommand(_undoStack, _redoStack);
+            RedoCommand = new RedoCommand(_undoStack, _redoStack);
         }
 
         public void Save()
@@ -69,29 +48,29 @@ namespace Piles.ViewModels
             ICollection<(OperationType, Pile)> unsavedPiles = new List<(OperationType, Pile)>();
             ICollection<(OperationType, (Rumination, Pile))> unsavedRuminations = new List<(OperationType, (Rumination, Pile))>();
 
-            for (int i = 0; i <= _undoIndex; i++)
+            foreach (IUndoableCommand undoableCommand in _undoStack.Reverse())
             {
-                if (_undoableCommands[i].TargetType == TargetType.Pile)
+                if (undoableCommand.TargetType == TargetType.Pile)
                 {
-                    unsavedPiles.Add((_undoableCommands[i].OperationType, (Pile)_undoableCommands[i].Target));
+                    unsavedPiles.Add((undoableCommand.OperationType, (Pile)undoableCommand.Target));
                 }
-                else if (_undoableCommands[i].TargetType == TargetType.Rumination)
+                else if (undoableCommand.TargetType == TargetType.Rumination)
                 {
-                    Tuple<Rumination, Pile> ruminationPile = (Tuple<Rumination, Pile>)_undoableCommands[i].Target;
-                    unsavedRuminations.Add((_undoableCommands[i].OperationType, (ruminationPile.Item1, ruminationPile.Item2)));
+                    Tuple<Rumination, Pile> ruminationPile = (Tuple<Rumination, Pile>)undoableCommand.Target;
+                    unsavedRuminations.Add((undoableCommand.OperationType, (ruminationPile.Item1, ruminationPile.Item2)));
                 }
-                else if (_undoableCommands[i].TargetType == TargetType.PileCollection)
+                else if (undoableCommand.TargetType == TargetType.PileCollection)
                 {
-                    foreach (Pile pile in (ICollection<Pile>)_undoableCommands[i].Target)
+                    foreach (Pile pile in (ICollection<Pile>)undoableCommand.Target)
                     {
-                        unsavedPiles.Add((_undoableCommands[i].OperationType, pile));
+                        unsavedPiles.Add((undoableCommand.OperationType, pile));
                     }
                 }
-                else if (_undoableCommands[i].TargetType == TargetType.RuminationCollection)
+                else if (undoableCommand.TargetType == TargetType.RuminationCollection)
                 {
-                    foreach ((Rumination, Pile) ruminationPile in (ICollection<(Rumination, Pile)>)_undoableCommands[i].Target)
+                    foreach ((Rumination, Pile) ruminationPile in (ICollection<(Rumination, Pile)>)undoableCommand.Target)
                     {
-                        unsavedRuminations.Add((_undoableCommands[i].OperationType, ruminationPile));
+                        unsavedRuminations.Add((undoableCommand.OperationType, ruminationPile));
                     }
                 }
             }
@@ -100,14 +79,16 @@ namespace Piles.ViewModels
             IRuminationService ruminationService = new RuminationService(_pilesDbContextFactory);
             pileService.Save(unsavedPiles);
             ruminationService.Save(unsavedRuminations);
+
+            _undoStack.Clear();
+            _redoStack.Clear();
         }
 
         private void OnExecuted(object sender, EventArgs e)
         {
             IUndoableCommand undoableCommand = sender as IUndoableCommand;
             IUndoableCommand undoableCommandDeepCopy = undoableCommand.Clone() as IUndoableCommand;
-            _undoableCommands.Add(undoableCommandDeepCopy);
-            _undoIndex = _undoableCommands.Count - 1;
+            _undoStack.Push(undoableCommandDeepCopy);
         }
 
         public void Listen(IUndoableCommand undoableCommand)

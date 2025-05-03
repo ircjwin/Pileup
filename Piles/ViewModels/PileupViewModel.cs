@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace Piles.ViewModels
 {
-    internal class PileupViewModel : ViewModelBase
+    public class PileupViewModel : ViewModelBase
     {
         private Pileup _pileup;
 
@@ -46,11 +46,11 @@ namespace Piles.ViewModels
 
         private Func<Pile, PileViewModel> _createPileViewModel;
 
-        public PileupViewModel(Func<Pile, PileViewModel> createPileViewModel, IPileService pileService)
+        public PileupViewModel(Func<Pile, PileViewModel> createPileViewModel, IPileService pileService, ICommandListener commandListener)
         {
             _piles = new ObservableCollection<PileViewModel>();
 
-            SavePileupCommand = new SavePileupCommand();
+            SavePileupCommand = new SavePileupCommand(commandListener);
             _createPileViewModel = createPileViewModel;
             _pileService = pileService;
         }
@@ -61,7 +61,7 @@ namespace Piles.ViewModels
 
         public static PileupViewModel CreateViewModel(Func<Pile, PileViewModel> createPileViewModel, IPileService pileService, ICommandListener commandListener)
         {
-            PileupViewModel pileupViewModel = new PileupViewModel(createPileViewModel, pileService);
+            PileupViewModel pileupViewModel = new PileupViewModel(createPileViewModel, pileService, commandListener);
             pileupViewModel.Load(commandListener);
             return pileupViewModel;
         }
