@@ -95,8 +95,9 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <StackPanel>
+                    <DockPanel>
                         <TextBox Text="{Binding NewRuminationDescription, UpdateSourceTrigger=PropertyChanged}"
+                                 DockPanel.Dock="Top"
                                  MinHeight="20">
                             <TextBox.InputBindings>
                                 <KeyBinding Command="{Binding AddRuminationCommand}"
@@ -105,7 +106,6 @@
                             </TextBox.InputBindings>
                         </TextBox>
                         <ListView ItemsSource="{Binding Ruminations, UpdateSourceTrigger=PropertyChanged}"
-                                  Height="{Binding ElementName=MainTabControl, Path=ActualHeight}"
                                   AllowDrop="true"
                                   attprop:ListViewDragDropBehavior.EnableDragDrop="True">
                             <ListView.ItemTemplate>
@@ -133,7 +133,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </StackPanel>
+                    </DockPanel>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
