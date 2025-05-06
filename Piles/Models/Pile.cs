@@ -9,7 +9,16 @@ namespace Piles.Models
 
         public DateTime CreatedOn { get; init; }
 
-        public string Title { get; set; }
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set 
+            {
+                _title = value;
+                OnPileChanged();
+            } 
+        }
 
         public IList<Rumination> Ruminations { get; set; }
 

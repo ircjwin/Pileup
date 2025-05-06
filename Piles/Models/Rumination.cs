@@ -8,13 +8,29 @@ namespace Piles.Models
 
         public DateTime CreatedOn { get; init; }
 
-        public string Description { get; set; }
+        private string _description;
+        public string Description
+        { 
+            get { return _description; }
+            set
+            {
+                _description = value;
+                OnRuminationChanged();
+            }
+        }
+
+        public event Action<Rumination> RuminationChanged;
 
         public Rumination(int origin, DateTime createdOn, string description)
         {
             Origin = origin;
             CreatedOn = createdOn;
             Description = description;
+        }
+
+        private void OnRuminationChanged()
+        {
+            RuminationChanged?.Invoke(this);
         }
     }
 }

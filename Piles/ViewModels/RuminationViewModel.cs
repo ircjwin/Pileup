@@ -59,6 +59,7 @@ namespace Piles.ViewModels
         {
             _rumination = rumination;
             _description = rumination.Description;
+            _rumination.RuminationChanged += OnRuminationChanged;
 
             UpdateRuminationCommand = new UpdateRuminationCommand(this);
             UpdateRuminationDescriptionCommand = new UpdateRuminationDescriptionCommand(_rumination, pile, commandListener);
@@ -72,6 +73,11 @@ namespace Piles.ViewModels
         public void UncheckRumination()
         {
             IsChecked = false;
+        }
+
+        private void OnRuminationChanged(Rumination rumination)
+        {
+            Description = rumination.Description;
         }
     }
 }

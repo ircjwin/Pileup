@@ -44,9 +44,11 @@ namespace Piles.Commands
         public override void Execute(object parameter)
         {
             RuminationViewModel ruminationViewModel = parameter as RuminationViewModel;
+
             _oldDescription = _target.Item1.Description;
             _newDescription = ruminationViewModel.Description;
             _target.Item1.Description = _newDescription;
+
             ruminationViewModel.UpdateRuminationCommand.Execute(null);
 
             OnExecuted();

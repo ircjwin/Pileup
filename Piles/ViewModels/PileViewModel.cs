@@ -124,6 +124,7 @@ namespace Piles.ViewModels
 
         private void OnPileChanged(Pile pile)
         {
+            Title = pile.Title;
             UpdateRuminations(pile.Ruminations);
         }
     }
