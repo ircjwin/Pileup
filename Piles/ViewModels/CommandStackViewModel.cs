@@ -1,4 +1,5 @@
 ﻿using Piles.Commands;
+using Piles.Core;
 using Piles.DbContexts;
 using Piles.Models;
 using Piles.Services;
@@ -29,8 +30,8 @@ namespace Piles.ViewModels
         private readonly IPilesDbContextFactory _pilesDbContextFactory;
         private ICollection<IUndoableCommand> _commandSubscriptions = new List<IUndoableCommand>();
 
-        private Stack<IUndoableCommand> _undoStack = new Stack<IUndoableCommand>();
-        private Stack<IUndoableCommand> _redoStack = new Stack<IUndoableCommand>();
+        private ObservableStack<IUndoableCommand> _undoStack = new ObservableStack<IUndoableCommand>();
+        private ObservableStack<IUndoableCommand> _redoStack = new ObservableStack<IUndoableCommand>();
 
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
@@ -88,7 +89,7 @@ namespace Piles.ViewModels
         {
             IUndoableCommand undoableCommand = sender as IUndoableCommand;
             IUndoableCommand undoableCommandDeepCopy = undoableCommand.Clone() as IUndoableCommand;
-            _undoStack.Push(undoableCommandDeepCopy);
+            _undoStack.ObservablePush(undoableCommandDeepCopy);
         }
 
         public void Listen(IUndoableCommand undoableCommand)

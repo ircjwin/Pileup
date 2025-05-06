@@ -1,31 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Piles.Core;
 
 namespace Piles.Commands
 {
     public class RedoCommand : CommandBase
     {
-        private readonly Stack<IUndoableCommand> _undoStack;
-        private readonly Stack<IUndoableCommand> _redoStack;
+        private readonly ObservableStack<IUndoableCommand> _undoStack;
+        private readonly ObservableStack<IUndoableCommand> _redoStack;
 
-        public RedoCommand(Stack<IUndoableCommand> undoStack, Stack<IUndoableCommand> redoStack)
+        public RedoCommand(ObservableStack<IUndoableCommand> undoStack, ObservableStack<IUndoableCommand> redoStack)
         {
             _undoStack = undoStack;
             _redoStack = redoStack;
+
+            _redoStack.StackChanged += OnCanExecuteChanged;
         }
 
-        //public override bool CanExecute(object parameter)
-        //{
-        //    return _redoStack.Count > 0;
-        //}
+        public override bool CanExecute(object parameter)
+        {
+            return _redoStack.Count > 0 && base.CanExecute(parameter);
+        }
 
         public override void Execute(object parameter)
         {
             if (_redoStack.Count <= 0) return;
 
-            IUndoableCommand command = _redoStack.Pop();
+            IUndoableCommand command = _redoStack.ObservablePop();
             command.Redo();
-            _undoStack.Push(command);
+            _undoStack.ObservablePush(command);
         }
     }
 }
