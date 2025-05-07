@@ -20,6 +20,7 @@
     <Compile Remove="ThonSong.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Images\DiceIcon.png" />
     <None Remove="Images\RedoIcon.png" />
     <None Remove="Images\UndoIcon.png" />
   </ItemGroup>
@@ -28,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\CheckIcon.png" />
+    <Resource Include="Images\DiceIcon.png" />
     <Resource Include="Images\RedoIcon.png" />
   </ItemGroup>
   <ItemGroup>

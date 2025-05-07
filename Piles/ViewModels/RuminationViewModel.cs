@@ -1,6 +1,5 @@
 ﻿using Piles.Commands;
 using Piles.Models;
-using System;
 using System.Windows.Input;
 
 namespace Piles.ViewModels
@@ -48,6 +47,17 @@ namespace Piles.ViewModels
             set
             {
                 _isChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isRollable = false;
+        public bool IsRollable
+        {
+            get { return  IsRollable; }
+            set
+            {
+                _isRollable = value;
                 OnPropertyChanged();
             }
         }
