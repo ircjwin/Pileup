@@ -55,12 +55,12 @@
                                 <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                           Margin="0,0,5,0" />
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                         attprop:FocusExtension.IsFocused="{Binding IsEditing}"
                                          Background="Transparent"                                                 
                                          IsReadOnly="{Binding IsNotEditing, UpdateSourceTrigger=PropertyChanged}"
                                          IsHitTestVisible="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}"
-                                         BorderBrush="{Binding IsNotEditing, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
-                                         Focusable="{Binding IsEditing}">
+                                         BorderBrush="{Binding IsNotEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
+                                         Focusable="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}"
+                                         attprop:FocusExtension.IsFocused="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBox.InputBindings>
                                         <KeyBinding Command="{Binding UpdateRuminationDescriptionCommand}"
                                                     CommandParameter="{Binding}"
