@@ -85,13 +85,10 @@ namespace Piles.Commands
 
         public override void Undo()
         {
-            IList<Rumination> ruminations = _pile.Ruminations.ToList();
-
             foreach ((int ruminationIndex, Rumination removedRumination) in _removedRuminations.Reverse())
             {
-                ruminations.Insert(ruminationIndex, removedRumination);
+                _pile.InsertRumination(ruminationIndex, removedRumination);
             }
-            _pile.Ruminations = ruminations;
         }
 
         public override RemoveCheckedRuminationsCommand Clone()

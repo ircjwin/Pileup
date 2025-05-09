@@ -39,6 +39,18 @@ namespace Piles.Models
             OnPileChanged();
         }
 
+        public void AddRumination(Rumination rumination)
+        {
+            Ruminations.Add(rumination);
+            OnPileChanged();
+        }
+
+        public void InsertRumination(int ruminationIndex, Rumination rumination)
+        {
+            Ruminations.Insert(ruminationIndex, rumination);
+            OnPileChanged();
+        }
+
         public void RemoveRumination(Rumination rumination)
         {
             Ruminations.Remove(rumination);

@@ -55,7 +55,7 @@ namespace Piles.Commands
         public override void Redo()
         {
             (Rumination rumination, Pile pile) = _target;
-            _pile.Ruminations.Add(rumination);
+            _pile.AddRumination(rumination);
         }
 
         public override void Undo()

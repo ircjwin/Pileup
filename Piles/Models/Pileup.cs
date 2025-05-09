@@ -22,6 +22,18 @@ namespace Piles.Models
             OnPileupChanged();
         }
 
+        public void AddPile(Pile pile)
+        {
+            Piles.Add(pile);
+            OnPileupChanged();
+        }
+
+        public void InsertPile(int pileIndex, Pile pile)
+        {
+            Piles.Insert(pileIndex, pile);
+            OnPileupChanged();
+        }
+
         public void RemovePile(Pile pile)
         {
             Piles.Remove(pile);

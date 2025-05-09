@@ -30,6 +30,7 @@ namespace Piles.ViewModels
                 if (_isUpdating) return;
 
                 _currentIndex = value;
+                OnPropertyChanged();
 
                 if (_currentIndex == _piles.Count - 1)
                 {
@@ -103,6 +104,16 @@ namespace Piles.ViewModels
             PileViewModel addPileViewModel = _createPileViewModel(addPile);
             addPileViewModel.IsRemovable = false;
             _piles.Add(addPileViewModel);
+        }
+
+        public PileViewModel GetCurrentPileViewModel()
+        {
+            if (_currentIndex < 0  || _currentIndex >= _piles.Count)
+            {
+                return null;
+            }
+
+            return _piles[_currentIndex];
         }
 
         private void OnPileupChanged(Pileup pileup)

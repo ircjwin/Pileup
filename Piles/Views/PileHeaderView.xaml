@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="Piles.Views.PileHeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Piles.Views"
+             xmlns:conv="clr-namespace:Piles.Converters"
+             xmlns:attprop="clr-namespace:Piles.AttachedProperties"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <conv:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal"
+                Background="Transparent">
+        <StackPanel.InputBindings>
+            <MouseBinding Gesture="LeftDoubleClick"
+                          Command="{Binding UpdatePileCommand}" />
+        </StackPanel.InputBindings>
+        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                 attprop:FocusExtension.IsFocused="{Binding IsEditing}"
+                 Background="Transparent"                                                 
+                 IsReadOnly="{Binding IsNotEditing, UpdateSourceTrigger=PropertyChanged}"
+                 IsHitTestVisible="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}"
+                 BorderBrush="{Binding IsNotEditing, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
+                 Focusable="{Binding IsEditing}">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding UpdatePileTitleCommand}"
+                            CommandParameter="{Binding}"
+                            Key="Return" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}, Path=DataContext.RemovePileCommand}"
+                CommandParameter="{Binding}"
+                Visibility="{Binding IsRemovable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
+                Height="10"
+                Width="10"
+                Margin="2,0,0,0"
+                Padding="0">
+            <TextBlock FontSize="6"
+                       FontWeight="Bold"
+                       Text="X" />
+        </Button>
+    </StackPanel>
+</UserControl>

@@ -83,6 +83,17 @@ namespace Piles.ViewModels
             }
         }
 
+        private bool _isRummagePile;
+        public bool IsRummagePile
+        {
+            get { return _isRummagePile; }
+            set
+            {
+                _isRummagePile = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand AddRuminationCommand { get; }
         public ICommand RemoveCheckedRuminationsCommand { get; }
         public ICommand CheckAllRuminationsCommand { get; }

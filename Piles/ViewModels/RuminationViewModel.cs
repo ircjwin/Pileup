@@ -54,7 +54,7 @@ namespace Piles.ViewModels
         private bool _isRollable = false;
         public bool IsRollable
         {
-            get { return  IsRollable; }
+            get { return _isRollable; }
             set
             {
                 _isRollable = value;
