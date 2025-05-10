@@ -57,19 +57,6 @@ namespace Piles.ViewModels
             }
         }
 
-        private bool _isRemovable = true;
-        public bool IsRemovable
-        {
-            get
-            {
-                return _isRemovable;
-            }
-            set
-            {
-                _isRemovable = value;
-            }
-        }
-
         private int _tabControlIndex;
         public int TabControlIndex
         {

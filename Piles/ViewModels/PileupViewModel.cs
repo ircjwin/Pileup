@@ -16,8 +16,6 @@ namespace Piles.ViewModels
         private readonly ObservableCollection<PileViewModel> _piles;
         public IEnumerable<PileViewModel> Piles => _piles;
 
-        private bool _isUpdating { get; set; } = false;
-
         private int _currentIndex;
         public int CurrentIndex
         {
@@ -27,15 +25,8 @@ namespace Piles.ViewModels
             }
             set
             {
-                if (_isUpdating) return;
-
                 _currentIndex = value;
                 OnPropertyChanged();
-
-                if (_currentIndex == _piles.Count - 1)
-                {
-                    this.AddPileCommand.Execute(null);
-                }
             }
         }
 
@@ -99,11 +90,6 @@ namespace Piles.ViewModels
 
                 tabControlIndex++;
             }
-
-            Pile addPile = new Pile(-1, default, "+", new ObservableCollection<Rumination>());
-            PileViewModel addPileViewModel = _createPileViewModel(addPile);
-            addPileViewModel.IsRemovable = false;
-            _piles.Add(addPileViewModel);
         }
 
         public PileViewModel GetCurrentPileViewModel()
@@ -118,9 +104,7 @@ namespace Piles.ViewModels
 
         private void OnPileupChanged(Pileup pileup)
         {
-            _isUpdating = true;
             UpdatePiles(pileup.Piles);
-            _isUpdating = false;
         }
     }
 }
