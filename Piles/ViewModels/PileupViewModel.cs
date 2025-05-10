@@ -16,16 +16,13 @@ namespace Piles.ViewModels
         private readonly ObservableCollection<PileViewModel> _piles;
         public IEnumerable<PileViewModel> Piles => _piles;
 
-        private int _currentIndex;
-        public int CurrentIndex
+        private PileViewModel _topPile;
+        public PileViewModel TopPile
         {
-            get
-            {
-                return _currentIndex;
-            }
+            get {  return _topPile; }
             set
             {
-                _currentIndex = value;
+                _topPile = value;
                 OnPropertyChanged();
             }
         }
@@ -90,16 +87,8 @@ namespace Piles.ViewModels
 
                 tabControlIndex++;
             }
-        }
 
-        public PileViewModel GetCurrentPileViewModel()
-        {
-            if (_currentIndex < 0  || _currentIndex >= _piles.Count)
-            {
-                return null;
-            }
-
-            return _piles[_currentIndex];
+            TopPile = _piles.FirstOrDefault();
         }
 
         private void OnPileupChanged(Pileup pileup)

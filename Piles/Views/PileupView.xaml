@@ -10,18 +10,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <TabControl DataContext="{Binding PileupViewModel}"
-                SelectedIndex="{Binding CurrentIndex, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding TopOfThePile, UpdateSourceTrigger=PropertyChanged}"
                 AllowDrop="True"
                 attprop:TabControlDragDropBehavior.EnableDragDrop="True">
         <TabControl.Resources>
-            <CollectionViewSource x:Key="PileCollection" Source="{Binding Piles, UpdateSourceTrigger=PropertyChanged}" />
+            <CollectionViewSource x:Key="PileCollection" 
+                                  Source="{Binding Piles, UpdateSourceTrigger=PropertyChanged}" />
         </TabControl.Resources>
         <TabControl.ItemsSource>
             <CompositeCollection>
                 <CollectionContainer Collection="{Binding Source={StaticResource PileCollection}}" />
                 <TabItem Header="+">
                     <TabItem.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding Path=AddPileCommand}" />
+                        <MouseBinding Gesture="LeftClick" 
+                                      Command="{Binding Path=AddPileCommand}" />
                     </TabItem.InputBindings>
                 </TabItem>
             </CompositeCollection>
