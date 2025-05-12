@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <TabControl DataContext="{Binding PileupViewModel}"
-                SelectedItem="{Binding TopOfThePile, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding TopPile, UpdateSourceTrigger=PropertyChanged}"
                 AllowDrop="True"
                 attprop:TabControlDragDropBehavior.EnableDragDrop="True">
         <TabControl.Resources>
