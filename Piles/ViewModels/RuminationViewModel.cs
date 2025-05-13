@@ -6,6 +6,19 @@ namespace Piles.ViewModels
 {
     public class RuminationViewModel : ViewModelBase
     {
+        private readonly Rumination _rumination;
+
+        private string _description;
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                _description = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _isEditing = false;
         public bool IsEditing
         {
@@ -24,19 +37,6 @@ namespace Piles.ViewModels
             get { return !_isEditing; }
         }
 
-        private readonly Rumination _rumination;
-
-        private string _description;
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-                OnPropertyChanged();
-            }
-        }
-
         private bool _isChecked = false;
         public bool IsChecked
         {
@@ -51,13 +51,13 @@ namespace Piles.ViewModels
             }
         }
 
-        private bool _isRollable = false;
-        public bool IsRollable
+        private bool _isRummage = false;
+        public bool IsRummage
         {
-            get { return _isRollable; }
+            get { return _isRummage; }
             set
             {
-                _isRollable = value;
+                _isRummage = value;
                 OnPropertyChanged();
             }
         }

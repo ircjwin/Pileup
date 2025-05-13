@@ -69,6 +69,7 @@
                     Value="{x:Null}" />
         </Style>
     </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -98,6 +99,30 @@
                   Grid.Row="1"
                   Grid.Column="0"
                   Grid.ColumnSpan="2">
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <ContentPresenter HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center" />
+                                <ControlTemplate.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsRummage, UpdateSourceTrigger=PropertyChanged}"
+                                                       Value="False" />
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=ListView}, UpdateSourceTrigger=PropertyChanged, Path=DataContext.IsRummagePile}"
+                                                       Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility"
+                                                Value="Collapsed" />
+                                    </MultiDataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Expander>
@@ -111,7 +136,7 @@
                                 <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                           Margin="0,0,5,0" />
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                         Background="Transparent"                                                 
+                                         Background="Transparent"
                                          IsReadOnly="{Binding IsNotEditing, UpdateSourceTrigger=PropertyChanged}"
                                          IsHitTestVisible="{Binding IsEditing, UpdateSourceTrigger=PropertyChanged}"
                                          BorderBrush="{Binding IsNotEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Transparent}"
@@ -126,9 +151,9 @@
                             </StackPanel>
                         </Expander.Header>
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding IsRollable, UpdateSourceTrigger=PropertyChanged}"
+                            <CheckBox IsChecked="{Binding IsRummage, UpdateSourceTrigger=PropertyChanged}"
                                       Margin="24,0,5,0" />
-                            <TextBlock Text="Hat Task" />
+                            <TextBlock Text="Rummage" />
                         </StackPanel>
                     </Expander>
                 </DataTemplate>
