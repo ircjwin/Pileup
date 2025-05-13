@@ -11,12 +11,11 @@
     <UserControl.Resources>
         <conv:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
     </UserControl.Resources>
-    <StackPanel Background="Transparent"
-                Orientation="Horizontal">
-        <StackPanel.InputBindings>
+    <DockPanel Background="Transparent">
+        <DockPanel.InputBindings>
             <MouseBinding Gesture="LeftDoubleClick"
                           Command="{Binding UpdatePileCommand}" />
-        </StackPanel.InputBindings>
+        </DockPanel.InputBindings>
         <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                  Background="Transparent"                                                 
                  IsReadOnly="{Binding IsNotEditing, UpdateSourceTrigger=PropertyChanged}"
@@ -35,10 +34,11 @@
                 Height="10"
                 Width="10"
                 Margin="2,0,0,0"
-                Padding="0">
+                Padding="0"
+                DockPanel.Dock="Right">
             <TextBlock FontSize="6"
                        FontWeight="Bold"
                        Text="X" />
         </Button>
-    </StackPanel>
+    </DockPanel>
 </UserControl>
