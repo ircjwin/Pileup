@@ -19,7 +19,7 @@ namespace Piles.ViewModels
             }
         }
 
-        private bool _isEditing = false;
+        private bool _isEditing;
         public bool IsEditing
         {
             get { return _isEditing; }
@@ -37,7 +37,7 @@ namespace Piles.ViewModels
             get { return !_isEditing; }
         }
 
-        private bool _isChecked = false;
+        private bool _isChecked;
         public bool IsChecked
         {
             get
@@ -51,13 +51,24 @@ namespace Piles.ViewModels
             }
         }
 
-        private bool _isRummage = false;
+        private bool _isRummage;
         public bool IsRummage
         {
             get { return _isRummage; }
             set
             {
                 _isRummage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isRummagePick;
+        public bool IsRummagePick
+        {
+            get { return _isRummagePick; }
+            set
+            {
+                _isRummagePick = value;
                 OnPropertyChanged();
             }
         }
