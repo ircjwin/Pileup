@@ -1,6 +1,7 @@
 # Pileup
 ![Static Badge](https://img.shields.io/badge/.net-8.0.13-steelblue?style=plastic&color=dodgerblue)
 ![Static Badge](https://img.shields.io/badge/csharp-12-steelblue?style=plastic&color=lightcoral)
+![Static Badge](https://img.shields.io/badge/python-3.10-steelblue?style=plastic&color=goldenrod)
 
 ## Description
 Task management application written in C# with WPF
